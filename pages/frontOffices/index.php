@@ -4,29 +4,70 @@ $description = "Site d'information dédié à la guerre en Iran : dernières nou
 $canonical = "https://example.com/";
 $updated = date('d/m/Y');
 
-// Articles listés statiquement
+// Articles listés statiquement avec catégories et status
 $allArticles = [
-    ['slug' => 'tensions-militaires', 'title' => 'Tensions militaires accrues à la frontière iranienne', 'desc' => 'Les forces iraniennes se préparent à des incidents potentiels après plusieurs frappes signalées.', 'image' => 'https://picsum.photos/600x380?random=1', 'alt' => 'Soldats iraniens et forces militaires', 'date' => '30 mars 2026'],
-    ['slug' => 'sanctions-economiques', 'title' => 'Sanctions économiques et impact sur l\'Iran', 'desc' => 'Les nouvelles sanctions internationales renforcent la pression financière sur l\'économie iranienne.', 'image' => 'https://picsum.photos/600x380?random=2', 'alt' => 'Graphique des sanctions économiques', 'date' => '28 mars 2026'],
-    ['slug' => 'reactions-internationales', 'title' => 'Réactions internationales au conflit iranien', 'desc' => 'Les pays clés appellent à un cessez-le-feu tout en cherchant des solutions diplomatiques.', 'image' => 'https://picsum.photos/600x380?random=3', 'alt' => 'Drapeaux des nations membres du conseil', 'date' => '27 mars 2026'],
-    ['slug' => 'impacts-civils', 'title' => 'Impacts humanitaires et civils du conflit', 'desc' => 'Les civils iraniens subissent les conséquences directes de la situation militaire et économique.', 'image' => 'https://picsum.photos/600x380?random=4', 'alt' => 'Population civile iranienne', 'date' => '26 mars 2026'],
-    ['slug' => 'routes-commerciales', 'title' => 'Impact sur les routes commerciales du Golfe', 'desc' => 'Le conflit perturbe gravement les échanges commerciaux et les prix de l\'énergie mondiale.', 'image' => 'https://picsum.photos/600x380?random=5', 'alt' => 'Navires commerciaux Golfe Persique', 'date' => '25 mars 2026'],
-    ['slug' => 'refugies-exodes', 'title' => 'Crises des réfugiés et exodes massifs', 'desc' => 'Les mouvements de population augmentent vers les pays voisins à cause de l\'instabilité.', 'image' => 'https://picsum.photos/600x380?random=6', 'alt' => 'Camps de réfugiés', 'date' => '24 mars 2026'],
-    ['slug' => 'cyberattaques-technologie', 'title' => 'Cyberattaques et guerre technologique', 'desc' => 'Le conflit s\'étend vers le cyberespace avec des attaques contre infrastructures critiques.', 'image' => 'https://picsum.photos/600x380?random=7', 'alt' => 'Cybersécurité et technologie', 'date' => '23 mars 2026'],
-    ['slug' => 'medias-propaganda', 'title' => 'Médias, propagande et désinformation', 'desc' => 'Les campagnes de désinformation se multiplient et affectent l\'opinion publique mondiale.', 'image' => 'https://picsum.photos/600x380?random=8', 'alt' => 'Médias et communication', 'date' => '22 mars 2026'],
-    ['slug' => 'armes-arsenaux', 'title' => 'Arsenal militaire et capacités de défense', 'desc' => 'Analyse détaillée des armements et des stratégies militaires des puissances impliquées.', 'image' => 'https://picsum.photos/600x380?random=9', 'alt' => 'Équipements militaires modernes', 'date' => '21 mars 2026'],
-    ['slug' => 'futur-previsions', 'title' => 'Prévisions et scénarios pour l\'avenir', 'desc' => 'Les experts discutent des possibles issues du conflit et de ses conséquences long terme.', 'image' => 'https://picsum.photos/600x380?random=10', 'alt' => 'Analyse prédictive géopolitique', 'date' => '20 mars 2026'],
+    ['slug' => 'tensions-militaires', 'title' => 'Tensions militaires accrues à la frontière iranienne', 'desc' => 'Les forces iraniennes se préparent à des incidents potentiels après plusieurs frappes signalées.', 'image' => 'https://picsum.photos/600x380?random=1', 'alt' => 'Soldats iraniens et forces militaires', 'date' => '2026-03-30', 'category' => 'Militaire', 'status' => 'Actualités'],
+    ['slug' => 'sanctions-economiques', 'title' => 'Sanctions économiques et impact sur l\'Iran', 'desc' => 'Les nouvelles sanctions internationales renforcent la pression financière sur l\'économie iranienne.', 'image' => 'https://picsum.photos/600x380?random=2', 'alt' => 'Graphique des sanctions économiques', 'date' => '2026-03-28', 'category' => 'Économique', 'status' => 'Analyse'],
+    ['slug' => 'reactions-internationales', 'title' => 'Réactions internationales au conflit iranien', 'desc' => 'Les pays clés appellent à un cessez-le-feu tout en cherchant des solutions diplomatiques.', 'image' => 'https://picsum.photos/600x380?random=3', 'alt' => 'Drapeaux des nations membres du conseil', 'date' => '2026-03-27', 'category' => 'Diplomatique', 'status' => 'Actualités'],
+    ['slug' => 'impacts-civils', 'title' => 'Impacts humanitaires et civils du conflit', 'desc' => 'Les civils iraniens subissent les conséquences directes de la situation militaire et économique.', 'image' => 'https://picsum.photos/600x380?random=4', 'alt' => 'Population civile iranienne', 'date' => '2026-03-26', 'category' => 'Humanitaire', 'status' => 'Reportage'],
+    ['slug' => 'routes-commerciales', 'title' => 'Impact sur les routes commerciales du Golfe', 'desc' => 'Le conflit perturbe gravement les échanges commerciaux et les prix de l\'énergie mondiale.', 'image' => 'https://picsum.photos/600x380?random=5', 'alt' => 'Navires commerciaux Golfe Persique', 'date' => '2026-03-25', 'category' => 'Économique', 'status' => 'Analyse'],
+    ['slug' => 'refugies-exodes', 'title' => 'Crises des réfugiés et exodes massifs', 'desc' => 'Les mouvements de population augmentent vers les pays voisins à cause de l\'instabilité.', 'image' => 'https://picsum.photos/600x380?random=6', 'alt' => 'Camps de réfugiés', 'date' => '2026-03-24', 'category' => 'Humanitaire', 'status' => 'Reportage'],
+    ['slug' => 'cyberattaques-technologie', 'title' => 'Cyberattaques et guerre technologique', 'desc' => 'Le conflit s\'étend vers le cyberespace avec des attaques contre infrastructures critiques.', 'image' => 'https://picsum.photos/600x380?random=7', 'alt' => 'Cybersécurité et technologie', 'date' => '2026-03-23', 'category' => 'Technologie', 'status' => 'Actualités'],
+    ['slug' => 'medias-propaganda', 'title' => 'Médias, propagande et désinformation', 'desc' => 'Les campagnes de désinformation se multiplient et affectent l\'opinion publique mondiale.', 'image' => 'https://picsum.photos/600x380?random=8', 'alt' => 'Médias et communication', 'date' => '2026-03-22', 'category' => 'Médias', 'status' => 'Analyse'],
+    ['slug' => 'armes-arsenaux', 'title' => 'Arsenal militaire et capacités de défense', 'desc' => 'Analyse détaillée des armements et des stratégies militaires des puissances impliquées.', 'image' => 'https://picsum.photos/600x380?random=9', 'alt' => 'Équipements militaires modernes', 'date' => '2026-03-21', 'category' => 'Militaire', 'status' => 'Analyse'],
+    ['slug' => 'futur-previsions', 'title' => 'Prévisions et scénarios pour l\'avenir', 'desc' => 'Les experts discutent des possibles issues du conflit et de ses conséquences long terme.', 'image' => 'https://picsum.photos/600x380?random=10', 'alt' => 'Analyse prédictive géopolitique', 'date' => '2026-03-20', 'category' => 'Diplomatique', 'status' => 'Analyse'],
 ];
+
+// Logique de filtrage et recherche
+$searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
+$selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
+$selectedStatus = isset($_GET['status']) ? $_GET['status'] : '';
+$dateFrom = isset($_GET['date_from']) ? $_GET['date_from'] : '';
+$dateTo = isset($_GET['date_to']) ? $_GET['date_to'] : '';
+
+// Récupérer les catégories et status uniques
+$categories = array_unique(array_map(fn($a) => $a['category'], $allArticles));
+$statuses = array_unique(array_map(fn($a) => $a['status'], $allArticles));
+sort($categories);
+sort($statuses);
+
+// Filtrer les articles
+$filteredArticles = array_filter($allArticles, function($article) use ($searchQuery, $selectedCategory, $selectedStatus, $dateFrom, $dateTo) {
+    // Filtre recherche globale (titre et description)
+    if ($searchQuery && stripos($article['title'] . ' ' . $article['desc'], $searchQuery) === false) {
+        return false;
+    }
+    // Filtre catégorie
+    if ($selectedCategory && $article['category'] !== $selectedCategory) {
+        return false;
+    }
+    // Filtre status
+    if ($selectedStatus && $article['status'] !== $selectedStatus) {
+        return false;
+    }
+    // Filtre date minimum
+    if ($dateFrom && $article['date'] < $dateFrom) {
+        return false;
+    }
+    // Filtre date maximum
+    if ($dateTo && $article['date'] > $dateTo) {
+        return false;
+    }
+    return true;
+});
+
+// Réinitialiser les clés du tableau
+$filteredArticles = array_values($filteredArticles);
 
 // Pagination
 $articlesPerPage = 6;
 $currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-$totalArticles = count($allArticles);
+$totalArticles = count($filteredArticles);
 $totalPages = ceil($totalArticles / $articlesPerPage);
 $currentPage = min($currentPage, $totalPages);
 
 $startIndex = ($currentPage - 1) * $articlesPerPage;
-$pageArticles = array_slice($allArticles, $startIndex, $articlesPerPage);
+$pageArticles = array_slice($filteredArticles, $startIndex, $articlesPerPage);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -66,6 +107,61 @@ $pageArticles = array_slice($allArticles, $startIndex, $articlesPerPage);
             <p>Ce site statique présente les dernières données accessibles et des analyses sur la guerre en Iran, en appliquant les bonnes pratiques SEO et l'accessibilité.</p>
         </section>
 
+        <!-- Section Filtres et Recherche -->
+        <section class="filters-section">
+            <h2>Recherche et filtres</h2>
+            <form method="GET" action="/" class="filters-form">
+                <!-- Recherche globale (pleine largeur) -->
+                <div class="filter-group">
+                    <label for="search">🔍 Recherche globale</label>
+                    <input type="text" id="search" name="search" placeholder="Tapez un mot-clé..." value="<?= htmlspecialchars($searchQuery) ?>" class="filter-input">
+                </div>
+
+                <!-- Filtres (alignés horizontalement) -->
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <label for="category">📂 Catégorie</label>
+                        <select id="category" name="category" class="filter-select">
+                            <option value="">Toutes les catégories</option>
+                            <?php foreach ($categories as $cat): ?>
+                                <option value="<?= htmlspecialchars($cat) ?>" <?= $selectedCategory === $cat ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($cat) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="status">📌 Type d'article</label>
+                        <select id="status" name="status" class="filter-select">
+                            <option value="">Tous les types</option>
+                            <?php foreach ($statuses as $st): ?>
+                                <option value="<?= htmlspecialchars($st) ?>" <?= $selectedStatus === $st ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($st) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="date_from">📅 De la date</label>
+                        <input type="date" id="date_from" name="date_from" value="<?= htmlspecialchars($dateFrom) ?>" class="filter-input">
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="date_to">À la date</label>
+                        <input type="date" id="date_to" name="date_to" value="<?= htmlspecialchars($dateTo) ?>" class="filter-input">
+                    </div>
+                </div>
+
+                <!-- Boutons -->
+                <div class="filter-buttons">
+                    <button type="submit" class="btn-filter-search">🔎 Rechercher</button>
+                    <a href="/" class="btn-filter-reset">✕ Réinitialiser</a>
+                </div>
+            </form>
+        </section>
+
         <section>
             <h2>Dernières actualités</h2>
             <div class="articles-info">
@@ -76,8 +172,12 @@ $pageArticles = array_slice($allArticles, $startIndex, $articlesPerPage);
                     <article class="card">
                         <img src="<?= htmlspecialchars($article['image']) ?>" alt="<?= htmlspecialchars($article['alt']) ?>" loading="lazy" />
                         <div class="card-content">
+                            <div class="card-meta">
+                                <span class="card-category"><?= htmlspecialchars($article['category']) ?></span>
+                                <span class="card-status"><?= htmlspecialchars($article['status']) ?></span>
+                            </div>
                             <h3><?= htmlspecialchars($article['title']) ?></h3>
-                            <p class="article-date">📅 <?= htmlspecialchars($article['date']) ?></p>
+                            <p class="article-date">📅 <?= date('d/m/Y', strtotime($article['date'])) ?></p>
                             <p><?= htmlspecialchars($article['desc']) ?></p>
                             <a href="/article/<?= htmlspecialchars($article['slug']) ?>.html">Lire l'article</a>
                         </div>
