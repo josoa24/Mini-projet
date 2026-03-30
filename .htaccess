@@ -2,6 +2,8 @@ Options +FollowSymlinks
 RewriteEngine On
 RewriteRule ^admin/login/?$ controllers/AdminController.php [L,QSA]
 
+RewriteRule ^$ pages/frontOffices/index.php [L,QSA]
+RewriteRule ^article/([-a-z0-9]+)\.html$ pages/frontOffices/article.php?slug=$1 [L,QSA]
 
 RewriteRule ^pages/article-([_a-z0-9]*)\.html$ pages/modules.php?id=$1 [L,QSA]
 
