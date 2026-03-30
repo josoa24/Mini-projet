@@ -68,31 +68,29 @@ $canonical = 'https://example.com/article/' . $slug . '.html';
     <meta name="description" content="<?= htmlspecialchars($article['description']) ?>">
     <meta name="keywords" content="Iran, guerre, actualité, sanctions, diplomatie, conflit">
     <link rel="canonical" href="<?= htmlspecialchars($canonical) ?>">
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f7f7f7; color: #222; }
-        .page { max-width: 960px; margin: 0 auto; padding: 18px; background: #fff; }
-        header, footer { padding: 14px 0; }
-        h1 { font-size: 2rem; margin: 0 0 10px; }
-        .breadcrumbs a { color: #0056b3; text-decoration: none; }
-        .breadcrumbs a:hover { text-decoration: underline; }
-        .article-image { width: 100%; max-height: 420px; object-fit: cover; border-radius: 8px; margin: 18px 0; }
-        section { margin-bottom: 22px; }
-        h2 { color: #0f2d5c; }
-        .meta { color: #555; font-size: 0.95rem; }
-        .toc { background: #eef4ff; padding: 12px; border-left: 4px solid #0056b3; margin: 16px 0; }
-        .toc ul { margin: 0; padding-left: 1.25rem; }
-        a.cta { display: inline-block; margin-top: 16px; padding: 10px 16px; background: #0056b3; color: #fff; text-decoration: none; border-radius: 4px; }
-        a.cta:hover { background: #003f8a; }
-        @media (max-width: 720px) { .page { padding: 14px; } }
-    </style>
+    <link rel="stylesheet" href="/pages/frontOffices/styles.css">
 </head>
 <body>
+    <header>
+        <div class="header-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">📰</div>
+                <span>Mada actu</span>
+            </a>
+            <nav>
+                <a href="/">Accueil</a>
+                <a href="/article/tensions-militaires.html">Tensions militaires</a>
+                <a href="/article/sanctions-economiques.html">Sanctions économiques</a>
+                <a href="/article/reactions-internationales.html">Réactions internationales</a>
+                <a href="/admin/login/" class="login-btn"><span class="login-icon"></span> Admin</a>
+            </nav>
+        </div>
+    </header>
+
     <div class="page">
-        <header>
-            <div class="breadcrumbs"><a href="/">Accueil</a> &rsaquo; <?= htmlspecialchars($article['title']) ?></div>
-            <h1><?= htmlspecialchars($article['title']) ?></h1>
-            <p class="meta">Article statique FrontOffice sur la guerre en Iran</p>
-        </header>
+        <div class="breadcrumbs"><a href="/">Accueil</a> &rsaquo; <?= htmlspecialchars($article['title']) ?></div>
+        <h1><?= htmlspecialchars($article['title']) ?></h1>
+        <p class="meta">Article statique FrontOffice sur la guerre en Iran</p>
 
         <img class="article-image" src="<?= htmlspecialchars($article['image']) ?>" alt="<?= htmlspecialchars($article['alt']) ?>">
 
@@ -115,7 +113,51 @@ $canonical = 'https://example.com/article/' . $slug . '.html';
         <a class="cta" href="/">Retour à l’accueil</a>
 
         <footer>
-            <p>Page FrontOffice statique réalisée dans <strong>pages/frontOffices</strong> avec une structure SEO et des balises sémantiques correctes.</p>
+            <div class="page">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h4>Navigation</h4>
+                        <ul>
+                            <li><a href="/">Accueil</a></li>
+                            <li><a href="/article/tensions-militaires.html">Tensions militaires</a></li>
+                            <li><a href="/article/sanctions-economiques.html">Sanctions économiques</a></li>
+                            <li><a href="/article/reactions-internationales.html">Réactions internationales</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>À propos</h4>
+                        <ul>
+                            <li><a href="#">Qui sommes-nous</a></li>
+                            <li><a href="#">Politique éditoriale</a></li>
+                            <li><a href="#">Conditions d'utilisation</a></li>
+                            <li><a href="#">Politique de confidentialité</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Ressources</h4>
+                        <ul>
+                            <li><a href="#">Actualités régionales</a></li>
+                            <li><a href="#">Analyses géopolitiques</a></li>
+                            <li><a href="#">Dernières dépêches</a></li>
+                            <li><a href="#">Archive</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Contact</h4>
+                        <ul>
+                            <li>📧 info@irannews.local</li>
+                            <li>📱 +33 (0)1 XX XX XX XX</li>
+                            <li>🏢 Paris, France</li>
+                            <li><a href="#">Nous contacter</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2026 <strong>Iran News</strong> - Site d'information statique FrontOffice</p>
+                    <p>Développé avec <strong>PHP</strong> + <strong>PostgreSQL</strong> | Hébergé sur <strong>Docker</strong> | Optimisé SEO &amp; Accessibilité</p>
+                    <p>Article informatif réalisé avec HTML sémantique et balises méta optimisées</p>
+                </div>
+            </div>
         </footer>
     </div>
 </body>

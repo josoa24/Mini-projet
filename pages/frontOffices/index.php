@@ -14,43 +14,28 @@ $updated = date('d/m/Y');
     <meta name="keywords" content="guerre en Iran, actualités Iran, conflit Iran, géopolitique, sanctions Iran">
     <meta name="author" content="Mini Projet - FrontOffice">
     <link rel="canonical" href="<?= htmlspecialchars($canonical) ?>">
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; color: #111; background: #f5f5f5; }
-        .page { max-width: 1024px; margin: 0 auto; padding: 18px; background: #fff; }
-        header, footer { padding: 14px 0; }
-        header h1 { font-size: 2.2rem; margin: 0 0 8px; }
-        .meta { color: #555; font-size: 0.95rem; }
-        nav a { color: #0056b3; text-decoration: none; margin-right: 20px; }
-        nav a:hover { text-decoration: underline; }
-        .hero { margin: 24px 0; padding: 20px; background: #e7f0ff; border-left: 4px solid #0056b3; }
-        .cards { display: grid; gap: 16px; margin: 24px 0; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-        .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 6px rgba(0,0,0,.08); }
-        .card img { width: 100%; height: 190px; object-fit: cover; }
-        .card-content { padding: 16px; }
-        .card-content h3 { margin-top: 0; }
-        .card-content p { margin: 0.75rem 0; }
-        .card-content a { color: #0056b3; text-decoration: none; font-weight: bold; }
-        .card-content a:hover { text-decoration: underline; }
-        section { margin-bottom: 24px; }
-        h2, h3 { color: #222; }
-        .list { margin: 0; padding: 0 0 0 1.25rem; }
-        .highlight { color: #c00; font-weight: bold; }
-        footer { border-top: 1px solid #ddd; font-size: 0.9rem; color: #444; }
-        @media (max-width: 640px) { .page { padding: 14px; } }
-    </style>
+    <link rel="stylesheet" href="/pages/frontOffices/styles.css">
 </head>
 <body>
-    <div class="page">
-        <header>
-            <p class="meta">Dernière mise à jour : <?= htmlspecialchars($updated) ?></p>
-            <h1>Guerre en Iran : actualités, enjeux et analyses</h1>
+    <header>
+        <div class="header-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">📰</div>
+                <span>Mada actu</span>
+            </a>
             <nav>
                 <a href="/">Accueil</a>
                 <a href="/article/tensions-militaires.html">Tensions militaires</a>
                 <a href="/article/sanctions-economiques.html">Sanctions économiques</a>
                 <a href="/article/reactions-internationales.html">Réactions internationales</a>
+                <a href="/admin/login/" class="login-btn"><span class="login-icon"></span> Admin</a>
             </nav>
-        </header>
+        </div>
+    </header>
+
+    <div class="page">
+        <p class="meta">Dernière mise à jour : <?= htmlspecialchars($updated) ?></p>
+        <h1>Guerre en Iran : actualités, enjeux et analyses</h1>
 
         <section class="hero">
             <h2>Information claire et structurée sur le conflit en Iran</h2>
@@ -96,8 +81,51 @@ $updated = date('d/m/Y');
         </section>
 
         <footer>
-            <p>Site de démonstration FrontOffice pour le projet d’informations sur la guerre en Iran.</p>
-            <p>HTML sémantique, SEO local optimisé, images avec <strong>alt</strong>, et structure adaptée mobile/desktop.</p>
+            <div class="page">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h4>Navigation</h4>
+                        <ul>
+                            <li><a href="/">Accueil</a></li>
+                            <li><a href="/article/tensions-militaires.html">Tensions militaires</a></li>
+                            <li><a href="/article/sanctions-economiques.html">Sanctions économiques</a></li>
+                            <li><a href="/article/reactions-internationales.html">Réactions internationales</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>À propos</h4>
+                        <ul>
+                            <li><a href="#">Qui sommes-nous</a></li>
+                            <li><a href="#">Politique éditoriale</a></li>
+                            <li><a href="#">Conditions d'utilisation</a></li>
+                            <li><a href="#">Politique de confidentialité</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Ressources</h4>
+                        <ul>
+                            <li><a href="#">Actualités régionales</a></li>
+                            <li><a href="#">Analyses géopolitiques</a></li>
+                            <li><a href="#">Dernières dépêches</a></li>
+                            <li><a href="#">Archive</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Contact</h4>
+                        <ul>
+                            <li>📧 info@irannews.local</li>
+                            <li>📱 +33 (0)1 XX XX XX XX</li>
+                            <li>🏢 Paris, France</li>
+                            <li><a href="#">Nous contacter</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2026 <strong>Iran News</strong> - Site d'information statique FrontOffice</p>
+                    <p>Développé avec <strong>PHP</strong> + <strong>PostgreSQL</strong> | Hébergé sur <strong>Docker</strong> | Optimisé SEO &amp; Accessibilité</p>
+                    <p>Dernière mise à jour : <?= htmlspecialchars($updated) ?></p>
+                </div>
+            </div>
         </footer>
     </div>
 </body>
