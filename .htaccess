@@ -1,7 +1,21 @@
 Options +FollowSymlinks
 RewriteEngine On
-RewriteRule ^admin/login/?$ controllers/AdminController.php [L,QSA]
 
+RewriteRule ^admin/login/?$ pages/back-office/login.php [L,QSA]
+RewriteRule ^admin/articles/?$ pages/back-office/articles.php [L,QSA]
+RewriteRule ^admin/authentify/?$ controllers/AdminController.php [L,QSA]
+RewriteRule ^admin/articles/create/?$  pages/back-office/article-create.php [L,QSA]
+RewriteRule ^admin/articles/create-form/?$ controllers/AdminController.php [L,QSA]
+RewriteRule ^admin/articles/edit/?$ pages/back-office/article-edit.php [L,QSA]
+RewriteRule ^admin/articles/edit-form/?$ controllers/AdminController.php [L,QSA]
+RewriteRule ^admin/articles/delete/?$ controllers/AdminController.php [L,QSA]
+
+RewriteRule ^admin/categories/?$ pages/back-office/categories.php [L,QSA]
+RewriteRule ^admin/categories/create/?$ pages/back-office/category-create.php [L,QSA]
+RewriteRule ^admin/categories/create-form/?$ controllers/AdminController.php [L,QSA]
+RewriteRule ^admin/categories/edit/?$ pages/back-office/category-edit.php [L,QSA]
+RewriteRule ^admin/categories/edit-form/?$ controllers/AdminController.php [L,QSA]
+RewriteRule ^admin/categories/delete/?$ controllers/AdminController.php [L,QSA]
 RewriteRule ^$ pages/frontOffices/index.php [L,QSA]
 RewriteRule ^article/([-a-z0-9]+)\.html$ pages/frontOffices/article-detail.php?slug=$1 [L,QSA]
 

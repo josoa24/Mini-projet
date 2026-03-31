@@ -1,0 +1,1 @@
+<?php echo "Test Docker OK !";
