@@ -33,7 +33,7 @@ $dbCategories = getCategories();
     <meta name="description" content="<?= htmlspecialchars($article['meta_description'] ?? '') ?>">
     <meta name="keywords" content="Iran, guerre, actualité, <?= htmlspecialchars($article['slug']) ?>">
     <link rel="canonical" href="<?= htmlspecialchars($canonical) ?>">
-    <link rel="stylesheet" href="/pages/frontOffices/styles.css">
+    <link rel="stylesheet" href="/assets/css/styles.min.css">
     <link rel="stylesheet" href="/assets/css/article-detail.min.css">
 
 
