@@ -1,62 +1,20 @@
 <?php
+require_once __DIR__ . '/../../models/functions/functions.php';
+
 $slug = isset($_GET['slug']) ? preg_replace('/[^a-z0-9\-]/', '', $_GET['slug']) : '';
-$articles = [
-    'tensions-militaires' => [
-        'title' => 'Tensions militaires accrues à la frontière iranienne',
-        'description' => 'Analyse des tensions militaires et des mouvements des troupes autour de l’Iran.',
-        'image' => 'https://via.placeholder.com/900x500?text=Tensions+militaires',
-        'alt' => 'Soldats et blindés près de la frontière iranienne',
-        'content' => [
-            [
-                'heading' => 'Situation sur le terrain',
-                'text' => 'Les forces iraniennes se préparent à des incidents potentiels après plusieurs frappes signalées dans les zones frontalières.',
-            ],
-            [
-                'heading' => 'Pistes diplomatiques',
-                'text' => 'Les pays voisins appellent à la désescalade, tandis que les responsables iraniens maintiennent leur position de défense nationale.',
-            ],
-        ],
-    ],
-    'sanctions-economiques' => [
-        'title' => 'Sanctions économiques et impact sur l’Iran',
-        'description' => 'Retour sur les sanctions récentes et leurs effets sur l’économie iranienne.',
-        'image' => 'https://via.placeholder.com/900x500?text=Sanctions+economiques',
-        'alt' => 'Graphique représentant les sanctions économiques',
-        'content' => [
-            [
-                'heading' => 'Marché et inflation',
-                'text' => 'Les nouvelles mesures restrictives aggravent l’inflation et pénalisent l’accès aux biens essentiels.',
-            ],
-            [
-                'heading' => 'Réponse des autorités',
-                'text' => 'Le gouvernement iranien cherche des alternatives économiques pour limiter l’impact des sanctions.',
-            ],
-        ],
-    ],
-    'reactions-internationales' => [
-        'title' => 'Réactions internationales au conflit iranien',
-        'description' => 'Synthèse des réactions diplomatiques et des positions des principaux acteurs mondiaux.',
-        'image' => 'https://via.placeholder.com/900x500?text=Reactions+internationales',
-        'alt' => 'Drapeaux de plusieurs nations du conseil de sécurité',
-        'content' => [
-            [
-                'heading' => 'Appels à un cessez-le-feu',
-                'text' => 'Plusieurs nations exigent une désescalade immédiate et la reprise du dialogue politique.',
-            ],
-            [
-                'heading' => 'Conséquences diplomatiques',
-                'text' => 'Les relations internationales avec l’Iran sont de plus en plus tendues, en particulier dans le Golfe.',
-            ],
-        ],
-    ],
-];
-
-if (!isset($articles[$slug])) {
-    header('HTTP/1.1 404 Not Found');
-    $slug = 'tensions-militaires';
+$articles = getArticles(100, 0, '', '', $slug);
+$article = null;
+foreach ($articles as $a) {
+    if ($a['slug'] === $slug) {
+        $article = $a;
+        break;
+    }
 }
-
-$article = $articles[$slug];
+if (!$article) {
+    header('HTTP/1.1 404 Not Found');
+    echo 'Article non trouvé';
+    exit;
+}
 $canonical = 'https://example.com/article/' . $slug . '.html';
 ?>
 <!DOCTYPE html>
@@ -65,7 +23,7 @@ $canonical = 'https://example.com/article/' . $slug . '.html';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($article['title']) ?></title>
-    <meta name="description" content="<?= htmlspecialchars($article['description']) ?>">
+    <meta name="description" content="<?= htmlspecialchars($article['meta_description'] ?? $article['content']) ?>">
     <meta name="keywords" content="Iran, guerre, actualité, sanctions, diplomatie, conflit">
     <link rel="canonical" href="<?= htmlspecialchars($canonical) ?>">
     <link rel="stylesheet" href="/pages/frontOffices/styles.css">
@@ -79,9 +37,7 @@ $canonical = 'https://example.com/article/' . $slug . '.html';
             </a>
             <nav>
                 <a href="/">Accueil</a>
-                <a href="/article/tensions-militaires.html">Tensions militaires</a>
-                <a href="/article/sanctions-economiques.html">Sanctions économiques</a>
-                <a href="/article/reactions-internationales.html">Réactions internationales</a>
+                <a href="/articles">Actualités</a>
                 <a href="/admin/login/" class="login-btn"><span class="login-icon"></span> Admin</a>
             </nav>
         </div>
@@ -90,25 +46,21 @@ $canonical = 'https://example.com/article/' . $slug . '.html';
     <div class="page">
         <div class="breadcrumbs"><a href="/">Accueil</a> &rsaquo; <?= htmlspecialchars($article['title']) ?></div>
         <h1><?= htmlspecialchars($article['title']) ?></h1>
-        <p class="meta">Article statique FrontOffice sur la guerre en Iran</p>
+        <p class="meta">Publié le <?= htmlspecialchars(date('d/m/Y', strtotime($article['created_at']))) ?> par <?= htmlspecialchars($article['author_name'] ?? '---') ?> | Catégorie : <?= htmlspecialchars($article['category_title'] ?? '') ?></p>
 
-        <img class="article-image" src="<?= htmlspecialchars($article['image']) ?>" alt="<?= htmlspecialchars($article['alt']) ?>">
+        <?php if (!empty($article['image_path'])): ?>
+            <img class="article-image" src="<?= htmlspecialchars($article['image_path']) ?>" alt="<?= htmlspecialchars($article['alt_text'] ?? $article['title']) ?>">
+        <?php endif; ?>
 
         <section class="toc">
-            <h2>Sommaire</h2>
-            <ul>
-                <?php foreach ($article['content'] as $block): ?>
-                    <li><?= htmlspecialchars($block['heading']) ?></li>
-                <?php endforeach; ?>
-            </ul>
+            <h2>Résumé</h2>
+            <p><?= nl2br(htmlspecialchars($article['meta_description'] ?? '')) ?></p>
         </section>
 
-        <?php foreach ($article['content'] as $block): ?>
-            <section>
-                <h2><?= htmlspecialchars($block['heading']) ?></h2>
-                <p><?= htmlspecialchars($block['text']) ?></p>
-            </section>
-        <?php endforeach; ?>
+        <section>
+            <h2>Contenu</h2>
+            <p><?= nl2br(htmlspecialchars($article['content'])) ?></p>
+        </section>
 
         <a class="cta" href="/">Retour à l’accueil</a>
 
@@ -119,9 +71,7 @@ $canonical = 'https://example.com/article/' . $slug . '.html';
                         <h4>Navigation</h4>
                         <ul>
                             <li><a href="/">Accueil</a></li>
-                            <li><a href="/article/tensions-militaires.html">Tensions militaires</a></li>
-                            <li><a href="/article/sanctions-economiques.html">Sanctions économiques</a></li>
-                            <li><a href="/article/reactions-internationales.html">Réactions internationales</a></li>
+                            <li><a href="/articles">Actualités</a></li>
                         </ul>
                     </div>
                     <div class="footer-section">

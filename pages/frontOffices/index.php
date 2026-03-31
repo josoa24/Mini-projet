@@ -1,72 +1,27 @@
 <?php
+require_once __DIR__ . '/../../models/functions/functions.php';
+
 $title = "Guerre en Iran : actualités et analyses";
 $description = "Site d'information dédié à la guerre en Iran : dernières nouvelles, analyses géopolitiques et impacts régionaux.";
 $canonical = "https://example.com/";
 $updated = date('d/m/Y');
 
-// Articles listés statiquement avec catégories et status
-$allArticles = [
-    ['slug' => 'tensions-militaires', 'title' => 'Tensions militaires accrues à la frontière iranienne', 'desc' => 'Les forces iraniennes se préparent à des incidents potentiels après plusieurs frappes signalées.', 'image' => 'https://picsum.photos/600x380?random=1', 'alt' => 'Soldats iraniens et forces militaires', 'date' => '2026-03-30', 'category' => 'Militaire', 'status' => 'Actualités'],
-    ['slug' => 'sanctions-economiques', 'title' => 'Sanctions économiques et impact sur l\'Iran', 'desc' => 'Les nouvelles sanctions internationales renforcent la pression financière sur l\'économie iranienne.', 'image' => 'https://picsum.photos/600x380?random=2', 'alt' => 'Graphique des sanctions économiques', 'date' => '2026-03-28', 'category' => 'Économique', 'status' => 'Analyse'],
-    ['slug' => 'reactions-internationales', 'title' => 'Réactions internationales au conflit iranien', 'desc' => 'Les pays clés appellent à un cessez-le-feu tout en cherchant des solutions diplomatiques.', 'image' => 'https://picsum.photos/600x380?random=3', 'alt' => 'Drapeaux des nations membres du conseil', 'date' => '2026-03-27', 'category' => 'Diplomatique', 'status' => 'Actualités'],
-    ['slug' => 'impacts-civils', 'title' => 'Impacts humanitaires et civils du conflit', 'desc' => 'Les civils iraniens subissent les conséquences directes de la situation militaire et économique.', 'image' => 'https://picsum.photos/600x380?random=4', 'alt' => 'Population civile iranienne', 'date' => '2026-03-26', 'category' => 'Humanitaire', 'status' => 'Reportage'],
-    ['slug' => 'routes-commerciales', 'title' => 'Impact sur les routes commerciales du Golfe', 'desc' => 'Le conflit perturbe gravement les échanges commerciaux et les prix de l\'énergie mondiale.', 'image' => 'https://picsum.photos/600x380?random=5', 'alt' => 'Navires commerciaux Golfe Persique', 'date' => '2026-03-25', 'category' => 'Économique', 'status' => 'Analyse'],
-    ['slug' => 'refugies-exodes', 'title' => 'Crises des réfugiés et exodes massifs', 'desc' => 'Les mouvements de population augmentent vers les pays voisins à cause de l\'instabilité.', 'image' => 'https://picsum.photos/600x380?random=6', 'alt' => 'Camps de réfugiés', 'date' => '2026-03-24', 'category' => 'Humanitaire', 'status' => 'Reportage'],
-    ['slug' => 'cyberattaques-technologie', 'title' => 'Cyberattaques et guerre technologique', 'desc' => 'Le conflit s\'étend vers le cyberespace avec des attaques contre infrastructures critiques.', 'image' => 'https://picsum.photos/600x380?random=7', 'alt' => 'Cybersécurité et technologie', 'date' => '2026-03-23', 'category' => 'Technologie', 'status' => 'Actualités'],
-    ['slug' => 'medias-propaganda', 'title' => 'Médias, propagande et désinformation', 'desc' => 'Les campagnes de désinformation se multiplient et affectent l\'opinion publique mondiale.', 'image' => 'https://picsum.photos/600x380?random=8', 'alt' => 'Médias et communication', 'date' => '2026-03-22', 'category' => 'Médias', 'status' => 'Analyse'],
-    ['slug' => 'armes-arsenaux', 'title' => 'Arsenal militaire et capacités de défense', 'desc' => 'Analyse détaillée des armements et des stratégies militaires des puissances impliquées.', 'image' => 'https://picsum.photos/600x380?random=9', 'alt' => 'Équipements militaires modernes', 'date' => '2026-03-21', 'category' => 'Militaire', 'status' => 'Analyse'],
-    ['slug' => 'futur-previsions', 'title' => 'Prévisions et scénarios pour l\'avenir', 'desc' => 'Les experts discutent des possibles issues du conflit et de ses conséquences long terme.', 'image' => 'https://picsum.photos/600x380?random=10', 'alt' => 'Analyse prédictive géopolitique', 'date' => '2026-03-20', 'category' => 'Diplomatique', 'status' => 'Analyse'],
-];
+$dbCategories = getCategories(); 
 
-// Logique de filtrage et recherche
-$searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
-$selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
-$selectedStatus = isset($_GET['status']) ? $_GET['status'] : '';
-$dateFrom = isset($_GET['date_from']) ? $_GET['date_from'] : '';
-$dateTo = isset($_GET['date_to']) ? $_GET['date_to'] : '';
+$selectedCategorySlug = isset($_GET['category']) ? $_GET['category'] : '';
 
-// Récupérer les catégories et status uniques
-$categories = array_unique(array_map(fn($a) => $a['category'], $allArticles));
-$statuses = array_unique(array_map(fn($a) => $a['status'], $allArticles));
-sort($categories);
-sort($statuses);
-
-// Filtrer les articles
-$filteredArticles = array_filter($allArticles, function($article) use ($searchQuery, $selectedCategory, $selectedStatus, $dateFrom, $dateTo) {
-    // Filtre recherche globale (titre et description)
-    if ($searchQuery && stripos($article['title'] . ' ' . $article['desc'], $searchQuery) === false) {
-        return false;
-    }
-    // Filtre catégorie
-    if ($selectedCategory && $article['category'] !== $selectedCategory) {
-        return false;
-    }
-    // Filtre status
-    if ($selectedStatus && $article['status'] !== $selectedStatus) {
-        return false;
-    }
-    // Filtre date minimum
-    if ($dateFrom && $article['date'] < $dateFrom) {
-        return false;
-    }
-    // Filtre date maximum
-    if ($dateTo && $article['date'] > $dateTo) {
-        return false;
-    }
-    return true;
-});
-
-// Réinitialiser les clés du tableau
-$filteredArticles = array_values($filteredArticles);
-
-// Pagination
 $articlesPerPage = 6;
 $currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+$offset = ($currentPage - 1) * $articlesPerPage;
+
+$allArticles = getArticles(1000, 0, 'published', $selectedCategorySlug, '');
+
+$filteredArticles = $allArticles;
 $totalArticles = count($filteredArticles);
 $totalPages = ceil($totalArticles / $articlesPerPage);
-$currentPage = min($currentPage, $totalPages);
-
+$currentPage = min($currentPage, $totalPages > 0 ? $totalPages : 1);
 $startIndex = ($currentPage - 1) * $articlesPerPage;
+
 $pageArticles = array_slice($filteredArticles, $startIndex, $articlesPerPage);
 ?>
 <!DOCTYPE html>
@@ -89,11 +44,17 @@ $pageArticles = array_slice($filteredArticles, $startIndex, $articlesPerPage);
                 <span>Iran News</span>
             </a>
             <nav>
-                <a href="/">Accueil</a>
-                <a href="/article/tensions-militaires.html">Tensions militaires</a>
-                <a href="/article/sanctions-economiques.html">Sanctions économiques</a>
-                <a href="/article/reactions-internationales.html">Réactions internationales</a>
-                <a href="/admin/login/" class="login-btn"><span class="login-icon"></span> Admin</a>
+                <a href="/" class="<?= ($selectedCategorySlug === '') ? 'active' : '' ?>">Accueil</a>
+                
+                <?php foreach ($dbCategories as $cat): ?>
+                    <?php 
+                        $slug = htmlspecialchars($cat['slug']);
+                        $isActive = ($selectedCategorySlug === $cat['slug']);
+                    ?>
+                    <a href="/?category=<?= urlencode($slug) ?>" class="<?= $isActive ? 'active' : '' ?>">
+                        <?= htmlspecialchars($cat['title']) ?>
+                    </a>
+                <?php endforeach; ?>
             </nav>
         </div>
     </header>
@@ -104,82 +65,43 @@ $pageArticles = array_slice($filteredArticles, $startIndex, $articlesPerPage);
 
         <section class="hero">
             <h2>Information claire et structurée sur le conflit en Iran</h2>
-            <p>Ce site statique présente les dernières données accessibles et des analyses sur la guerre en Iran, en appliquant les bonnes pratiques SEO et l'accessibilité.</p>
-        </section>
-
-        <!-- Section Filtres et Recherche -->
-        <section class="filters-section">
-            <h2>Recherche et filtres</h2>
-            <form method="GET" action="/" class="filters-form">
-                <!-- Recherche globale (pleine largeur) -->
-                <div class="filter-group">
-                    <label for="search">🔍 Recherche globale</label>
-                    <input type="text" id="search" name="search" placeholder="Tapez un mot-clé..." value="<?= htmlspecialchars($searchQuery) ?>" class="filter-input">
-                </div>
-
-                <!-- Filtres (alignés horizontalement) -->
-                <div class="filters-row">
-                    <div class="filter-group">
-                        <label for="category">📂 Catégorie</label>
-                        <select id="category" name="category" class="filter-select">
-                            <option value="">Toutes les catégories</option>
-                            <?php foreach ($categories as $cat): ?>
-                                <option value="<?= htmlspecialchars($cat) ?>" <?= $selectedCategory === $cat ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($cat) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="filter-group">
-                        <label for="status">📌 Type d'article</label>
-                        <select id="status" name="status" class="filter-select">
-                            <option value="">Tous les types</option>
-                            <?php foreach ($statuses as $st): ?>
-                                <option value="<?= htmlspecialchars($st) ?>" <?= $selectedStatus === $st ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($st) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="filter-group">
-                        <label for="date_from">📅 De la date</label>
-                        <input type="date" id="date_from" name="date_from" value="<?= htmlspecialchars($dateFrom) ?>" class="filter-input">
-                    </div>
-
-                    <div class="filter-group">
-                        <label for="date_to">À la date</label>
-                        <input type="date" id="date_to" name="date_to" value="<?= htmlspecialchars($dateTo) ?>" class="filter-input">
-                    </div>
-                </div>
-
-                <!-- Boutons -->
-                <div class="filter-buttons">
-                    <button type="submit" class="btn-filter-search">🔎 Rechercher</button>
-                    <a href="/" class="btn-filter-reset">✕ Réinitialiser</a>
-                </div>
-            </form>
+            <p>Ce site présente les dernières données accessibles et des analyses sur la guerre en Iran, en appliquant les bonnes pratiques SEO et l'accessibilité.</p>
         </section>
 
         <section>
             <h2>Dernières actualités</h2>
             <div class="articles-info">
-                <p class="articles-count">Affichage <?= $startIndex + 1 ?> à <?= min($startIndex + $articlesPerPage, $totalArticles) ?> sur <?= $totalArticles ?> articles</p>
+                <?php if ($totalArticles > 0): ?>
+                    <p class="articles-count">Affichage <?= $startIndex + 1 ?> à <?= min($startIndex + $articlesPerPage, $totalArticles) ?> sur <?= $totalArticles ?> articles</p>
+                <?php else: ?>
+                    <p class="articles-count">Aucun article trouvé dans cette catégorie.</p>
+                <?php endif; ?>
             </div>
+            
             <div class="cards">
                 <?php foreach ($pageArticles as $article): ?>
                     <article class="card">
-                        <img src="<?= htmlspecialchars($article['image']) ?>" alt="<?= htmlspecialchars($article['alt']) ?>" loading="lazy" />
+                        <?php if (!empty($article['image_path'])): ?>
+                            <img src="<?= htmlspecialchars($article['image_path']) ?>" alt="<?= htmlspecialchars($article['alt_text'] ?? $article['title']) ?>" loading="lazy" />
+                        <?php endif; ?>
                         <div class="card-content">
                             <div class="card-meta">
-                                <span class="card-category"><?= htmlspecialchars($article['category']) ?></span>
-                                <span class="card-status"><?= htmlspecialchars($article['status']) ?></span>
+                                <span class="card-category">
+                                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M2 2h12v2H2V2zm0 3h12v2H2V5zm0 3h12v2H2V8zm0 3h12v2H2v-2z"/></svg> 
+                                    <?= htmlspecialchars($article['category_title'] ?? 'Sans catégorie') ?>
+                                </span>
+                                <span class="card-status">
+                                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2" fill="none"/></svg> 
+                                    <?= htmlspecialchars($article['status'] ?? '') ?>
+                                </span>
                             </div>
                             <h3><?= htmlspecialchars($article['title']) ?></h3>
-                            <p class="article-date">📅 <?= date('d/m/Y', strtotime($article['date'])) ?></p>
-                            <p><?= htmlspecialchars($article['desc']) ?></p>
-                            <a href="/article/<?= htmlspecialchars($article['slug']) ?>.html">Lire l'article</a>
+                            <p class="article-date">
+                                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 3v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1zm2 2a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8A.5.5 0 0 1 3 5zm0 2a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8A.5.5 0 0 1 3 7zm0 2a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8A.5.5 0 0 1 3 9zm0 2a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5z"/></svg> 
+                                <?= isset($article['created_at']) ? date('d/m/Y', strtotime($article['created_at'])) : '' ?>
+                            </p>
+                            <p><?= htmlspecialchars($article['meta_description'] ?? 'Pas de description disponible.') ?></p>
+                            <a href="/article/<?= htmlspecialchars($article['id']) ?>-<?= htmlspecialchars($article['slug']) ?>">Lire l'article</a>
                         </div>
                     </article>
                 <?php endforeach; ?>
@@ -188,26 +110,26 @@ $pageArticles = array_slice($filteredArticles, $startIndex, $articlesPerPage);
             <?php if ($totalPages > 1): ?>
                 <nav class="pagination" aria-label="Pagination des articles">
                     <?php if ($currentPage > 1): ?>
-                        <a href="/?page=1" class="pagination-link pagination-first" title="Première page">✓ Première</a>
-                        <a href="/?page=<?= $currentPage - 1 ?>" class="pagination-link pagination-prev" title="Page précédente">← Précédent</a>
+                        <a href="/?page=1<?= ($selectedCategorySlug !== '') ? '&category=' . urlencode($selectedCategorySlug) : '' ?>" class="pagination-link pagination-first" title="Première page">✓ Première</a>
+                        <a href="/?page=<?= $currentPage - 1 ?><?= ($selectedCategorySlug !== '') ? '&category=' . urlencode($selectedCategorySlug) : '' ?>" class="pagination-link pagination-prev" title="Page précédente">← Précédent</a>
                     <?php else: ?>
                         <span class="pagination-link pagination-disabled">✓ Première</span>
                         <span class="pagination-link pagination-disabled">← Précédent</span>
                     <?php endif; ?>
-
+                    
                     <div class="pagination-numbers">
                         <?php for ($p = 1; $p <= $totalPages; $p++): ?>
                             <?php if ($p === $currentPage): ?>
                                 <span class="pagination-current" aria-current="page"><?= $p ?></span>
                             <?php else: ?>
-                                <a href="/?page=<?= $p ?>" class="pagination-number"><?= $p ?></a>
+                                <a href="/?page=<?= $p ?><?= ($selectedCategorySlug !== '') ? '&category=' . urlencode($selectedCategorySlug) : '' ?>" class="pagination-number"><?= $p ?></a>
                             <?php endif; ?>
                         <?php endfor; ?>
                     </div>
-
+                    
                     <?php if ($currentPage < $totalPages): ?>
-                        <a href="/?page=<?= $currentPage + 1 ?>" class="pagination-link pagination-next" title="Page suivante">Suivant →</a>
-                        <a href="/?page=<?= $totalPages ?>" class="pagination-link pagination-last" title="Dernière page">Dernière ✓</a>
+                        <a href="/?page=<?= $currentPage + 1 ?><?= ($selectedCategorySlug !== '') ? '&category=' . urlencode($selectedCategorySlug) : '' ?>" class="pagination-link pagination-next" title="Page suivante">Suivant →</a>
+                        <a href="/?page=<?= $totalPages ?><?= ($selectedCategorySlug !== '') ? '&category=' . urlencode($selectedCategorySlug) : '' ?>" class="pagination-link pagination-last" title="Dernière page">Dernière ✓</a>
                     <?php else: ?>
                         <span class="pagination-link pagination-disabled">Suivant →</span>
                         <span class="pagination-link pagination-disabled">Dernière ✓</span>
@@ -230,10 +152,14 @@ $pageArticles = array_slice($filteredArticles, $startIndex, $articlesPerPage);
                     <div class="footer-section">
                         <h4>Navigation</h4>
                         <ul>
-                            <li><a href="/">Accueil</a></li>
-                            <li><a href="/article/tensions-militaires.html">Tensions militaires</a></li>
-                            <li><a href="/article/sanctions-economiques.html">Sanctions économiques</a></li>
-                            <li><a href="/article/reactions-internationales.html">Réactions internationales</a></li>
+                            <li><a href="/" class="<?= ($selectedCategorySlug === '') ? 'active' : '' ?>">Accueil</a></li>
+                            <?php foreach ($dbCategories as $cat): ?>
+                                <?php 
+                                    $slug = htmlspecialchars($cat['slug']);
+                                    $isActive = ($selectedCategorySlug === $cat['slug']);
+                                ?>
+                                <li><a href="/?category=<?= urlencode($slug) ?>" class="<?= $isActive ? 'active' : '' ?>"><?= htmlspecialchars($cat['title']) ?></a></li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                     <div class="footer-section">
@@ -257,9 +183,9 @@ $pageArticles = array_slice($filteredArticles, $startIndex, $articlesPerPage);
                     <div class="footer-section">
                         <h4>Contact</h4>
                         <ul>
-                            <li>📧 info@irannews.local</li>
-                            <li>📱 +33 (0)1 XX XX XX XX</li>
-                            <li>🏢 Paris, France</li>
+                            <li>📧 iranwarinfo@gmail.com</li>
+                            <li>📱 335462338</li>
+                            <li>🏢 Antananarivo, Madagascar</li>
                             <li><a href="#">Nous contacter</a></li>
                         </ul>
                     </div>

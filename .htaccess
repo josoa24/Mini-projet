@@ -17,7 +17,7 @@ RewriteRule ^admin/categories/edit/?$ pages/back-office/category-edit.php [L,QSA
 RewriteRule ^admin/categories/edit-form/?$ controllers/AdminController.php [L,QSA]
 RewriteRule ^admin/categories/delete/?$ controllers/AdminController.php [L,QSA]
 RewriteRule ^$ pages/frontOffices/index.php [L,QSA]
-RewriteRule ^article/([-a-z0-9]+)\.html$ pages/frontOffices/article-detail.php?slug=$1 [L,QSA]
+RewriteRule ^article/([-a-z0-9]+)$ pages/frontOffices/article-detail.php?slug=$1 [L,QSA]
 
 RewriteRule ^pages/article-([_a-z0-9]*)\.html$ pages/modules.php?id=$1 [L,QSA]
 
