@@ -22,7 +22,7 @@ $articles = getArticles($perPage, $offset, $status, $category, $search);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>Articles — Backoffice Iran War Info</title>
+  <title>Articles — Backoffice Actu Info</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/articles.css">
@@ -33,7 +33,7 @@ $articles = getArticles($perPage, $offset, $status, $category, $search);
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="logo-badge">▸ Backoffice CMS</div>
-      <h2>Iran War <span>Info</span></h2>
+      <h2>Actu <span>Info</span></h2>
     </div>
     <div class="sidebar-user">
       <div class="user-avatar">AD</div>
@@ -162,7 +162,13 @@ $articles = getArticles($perPage, $offset, $status, $category, $search);
             <tbody>
             <?php foreach ($articles as $article): ?>
               <tr>
-                <td><div class="img-placeholder">IMG</div></td>
+                <td>
+                  <?php if (!empty($article['image_path'])): ?>
+                    <img src="<?= htmlspecialchars($article['image_path']) ?>" alt="Image" style="width:44px;height:44px;object-fit:cover;border-radius:4px;border:1px solid var(--border);">
+                  <?php else: ?>
+                    <div class="img-placeholder">IMG</div>
+                  <?php endif; ?>
+                </td>
                 <td class="td-title"><?= htmlspecialchars($article['title']) ?></td>
                 <td><?= htmlspecialchars($article['category_title'] ?? '') ?></td>
                 <td><?= htmlspecialchars($article['author_name'] ?? '') ?></td>

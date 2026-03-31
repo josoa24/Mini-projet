@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Connexion au backoffice — Système de gestion des contenus">
   <meta name="robots" content="noindex, nofollow">
-  <title>Connexion — Backoffice Iran War Info</title>
+  <title>Connexion — Backoffice Actu Info</title>
   <link rel="stylesheet" href="/assets/css/login.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
   <div class="login-wrapper">
     <div class="brand">
       <div class="brand-badge">Backoffice CMS</div>
-      <h1>Iran War <span>Info</span></h1>
+      <h1>Actu <span>Info</span></h1>
       <p>Système de gestion des contenus</p>
     </div>
     <div class="card">
@@ -46,7 +46,7 @@
         Identifiants par défaut : <strong>admin@iranwar.info</strong> / <strong>admin123</strong>
       </div>
     </div>
-    <p class="footer-note">Iran War Info &copy; 2026 — Accès restreint</p>
+    <p class="footer-note">Actu Info &copy; 2026 — Accès restreint</p>
   </div>
 </body>
 </html>

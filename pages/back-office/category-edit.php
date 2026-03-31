@@ -15,7 +15,7 @@ if (!$category) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>Modifier une catégorie — Backoffice Iran War Info</title>
+  <title>Modifier une catégorie — Backoffice Actu Info</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/categories.css">
@@ -26,7 +26,7 @@ if (!$category) {
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="logo-badge">▸ Backoffice CMS</div>
-      <h2>Iran War <span>Info</span></h2>
+      <h2>Actu <span>Info</span></h2>
     </div>
     <div class="sidebar-user">
       <div class="user-avatar">AD</div>

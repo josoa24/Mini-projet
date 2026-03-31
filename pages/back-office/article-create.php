@@ -2,6 +2,13 @@
 require_once __DIR__ . '/../../models/functions/functions.php';
 
 $categories = getCategories();
+$error = $_GET['error'] ?? '';
+$title = $_POST['title'] ?? '';
+$content = $_POST['content'] ?? '';
+$status = $_POST['status'] ?? 'draft';
+$categoryId = $_POST['category_id'] ?? '';
+$metaDescription = $_POST['meta_description'] ?? '';
+$altText = $_POST['alt_text'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -129,6 +136,10 @@ $categories = getCategories();
         </div>
       </div>
 
+      <?php if ($error === 'slug'): ?>
+        <div class="alert alert-error">Le titre ou le slug existe déjà. Veuillez en choisir un autre.</div>
+      <?php endif; ?>
+
       <form id="article-form" action="/admin/articles/create-form" method="POST" enctype="multipart/form-data">
         <div class="form-grid">
           <div>
@@ -137,9 +148,9 @@ $categories = getCategories();
 
               <div class="field">
                 <label for="title">Titre de l'article *</label>
-                <input type="text" id="title" name="title" required maxlength="255" oninput="updateSlug(this.value);updateCharCount('title',255)" placeholder="Ex : Frappes aériennes sur Téhéran...">
+                <input type="text" id="title" name="title" required maxlength="255" oninput="updateSlug(this.value);updateCharCount('title',255)" placeholder="Ex : Frappes aériennes sur Téhéran..." value="<?= htmlspecialchars($title) ?>">
                 <div class="slug-preview">URL : /article/<span id="slug-preview">slug-de-larticle</span></div>
-                <div class="char-count"><span id="title-count">0</span>/255</div>
+                <div class="char-count"><span id="title-count"><?= strlen($title) ?></span>/255</div>
               </div>
 
               <div class="field">
@@ -166,7 +177,7 @@ $categories = getCategories();
                     </svg>
                   </button>
                 </div>
-                <textarea class="with-toolbar" id="content" name="content" required placeholder="Rédigez votre article ici..."></textarea>
+                <textarea class="with-toolbar" id="content" name="content" required placeholder="Rédigez votre article ici..."><?= htmlspecialchars($content) ?></textarea>
               </div>
             </div>
           </div>
@@ -177,9 +188,9 @@ $categories = getCategories();
               <div class="field">
                 <label>Statut</label>
                 <div class="status-toggle">
-                  <input type="radio" name="status" id="status-draft" value="draft" checked>
+                  <input type="radio" name="status" id="status-draft" value="draft" <?= $status === 'draft' ? 'checked' : '' ?>>
                   <label for="status-draft">◌ Brouillon</label>
-                  <input type="radio" name="status" id="status-published" value="published">
+                  <input type="radio" name="status" id="status-published" value="published" <?= $status === 'published' ? 'checked' : '' ?>>
                   <label for="status-published">● Publier</label>
                 </div>
               </div>
@@ -189,7 +200,7 @@ $categories = getCategories();
                 <select id="category_id" name="category_id" required>
                   <option value="">— Sélectionner —</option>
                   <?php foreach ($categories as $cat): ?>
-                    <option value="<?= htmlspecialchars($cat['id']) ?>"><?= htmlspecialchars($cat['title']) ?></option>
+                    <option value="<?= htmlspecialchars($cat['id']) ?>" <?= $categoryId == $cat['id'] ? 'selected' : '' ?>><?= htmlspecialchars($cat['title']) ?></option>
                   <?php endforeach; ?>
                 </select>
               </div>
@@ -225,7 +236,7 @@ $categories = getCategories();
 
               <div class="field" style="margin-top:1rem; margin-bottom:0;">
                 <label for="alt_text">Texte alternatif (alt)</label>
-                <input type="text" id="alt_text" name="alt_text" placeholder="Description de l'image pour le SEO">
+                <input type="text" id="alt_text" name="alt_text" placeholder="Description de l'image pour le SEO" value="<?= htmlspecialchars($altText) ?>">
                 <div class="field-hint">Obligatoire pour l'accessibilité et le référencement.</div>
               </div>
             </div>
@@ -234,8 +245,8 @@ $categories = getCategories();
               <h3>SEO / Référencement</h3>
               <div class="field">
                 <label for="meta_description">Meta description</label>
-                <textarea id="meta_description" name="meta_description" style="min-height:90px;" maxlength="160" oninput="updateCharCount('meta_description',160)" placeholder="Résumé affiché dans les résultats Google..."></textarea>
-                <div class="char-count"><span id="meta_description-count">0</span>/160</div>
+                <textarea id="meta_description" name="meta_description" style="min-height:90px;" maxlength="160" oninput="updateCharCount('meta_description',160)" placeholder="Résumé affiché dans les résultats Google..."><?= htmlspecialchars($metaDescription) ?></textarea>
+                <div class="char-count"><span id="meta_description-count"><?= strlen($metaDescription) ?></span>/160</div>
               </div>
             </div>
           </div>

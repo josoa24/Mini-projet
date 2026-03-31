@@ -41,12 +41,65 @@ if ($uri === '/admin/articles/create-form' && $_SERVER['REQUEST_METHOD'] === 'PO
 
     $imagePath = null;
 
+    if (!empty($_FILES['image']['name'])) {
+        $uploadDir = __DIR__ . '/../assets/images/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $fileTmp  = $_FILES['image']['tmp_name'];
+        $fileName = basename($_FILES['image']['name']);
+
+        $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        $allowed = ['jpg', 'jpeg', 'png', 'webp'];
+        $maxSize = 5 * 1024 * 1024;
+
+        if (in_array($ext, $allowed, true) && $_FILES['image']['size'] <= $maxSize) {
+            $safeName = preg_replace('/[^a-zA-Z0-9-_\.]/', '-', pathinfo($fileName, PATHINFO_FILENAME));
+            $finalName = $safeName . '-' . time() . '.webp';
+            $dest = $uploadDir . $finalName;
+
+            $img = null;
+
+            if ($ext === 'jpg' || $ext === 'jpeg') {
+                $img = imagecreatefromjpeg($fileTmp);
+            } elseif ($ext === 'png') {
+                $img = imagecreatefrompng($fileTmp);
+                imagepalettetotruecolor($img);
+                imagealphablending($img, true);
+                imagesavealpha($img, true);
+            } elseif ($ext === 'webp' && function_exists('imagecreatefromwebp')) {
+                $img = imagecreatefromwebp($fileTmp);
+            }
+
+            if ($img) {
+                imagewebp($img, $dest, 75); 
+                imagedestroy($img);
+                $imagePath = '/assets/images/' . $finalName;
+            } else {
+                if (move_uploaded_file($fileTmp, $dest)) {
+                    $imagePath = '/assets/images/' . $finalName;
+                }
+            }
+        }
+    }
+
     $userId = (int)($_SESSION['user']['id'] ?? 0);
 
     if ($title && $content && $categoryId > 0 && $userId > 0) {
-        createArticle($title, $slug, $content, $imagePath, $status, $userId, $categoryId, $metaDescription, $altText);
-        header('Location: /admin/articles?created=1');
-        exit;
+        try {
+            createArticle($title, $slug, $content, $imagePath, $status, $userId, $categoryId, $metaDescription, $altText);
+            header('Location: /admin/articles?created=1');
+            exit;
+        } catch (PDOException $e) {
+            if ($e->getCode() === '23505') {
+                header('Location: /admin/articles/create?error=slug');
+                exit;
+            } else {
+                header('Location: /admin/articles/create?error=1');
+                exit;
+            }
+        }
     } else {
         header('Location: /admin/articles/create?error=1');
         exit;
@@ -75,7 +128,56 @@ if ($uri === '/admin/articles/edit-form' && $_SERVER['REQUEST_METHOD'] === 'POST
     $slug = preg_replace('~-+~', '-', $slug);
     $slug = trim($slug, '-');
 
-    $imagePath = null;
+    $imagePath = $_POST['current_image'] ?? null;
+
+    if (!empty($_FILES['image']['name'])) {
+        $uploadDir = __DIR__ . '/../assets/images/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $fileTmp  = $_FILES['image']['tmp_name'];
+        $fileName = basename($_FILES['image']['name']);
+
+        $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        $allowed = ['jpg', 'jpeg', 'png', 'webp'];
+        $maxSize = 5 * 1024 * 1024;
+
+        if (in_array($ext, $allowed, true) && $_FILES['image']['size'] <= $maxSize) {
+            $safeName = preg_replace('/[^a-zA-Z0-9-_\.]/', '-', pathinfo($fileName, PATHINFO_FILENAME));
+            $finalName = $safeName . '-' . time() . '.' . $ext;
+            $dest = $uploadDir . $finalName;
+
+            if ($ext === 'jpg' || $ext === 'jpeg') {
+                $img = imagecreatefromjpeg($fileTmp);
+                if ($img) {
+                    imagejpeg($img, $dest, 80);
+                    imagedestroy($img);
+                    $imagePath = '/assets/images/' . $finalName;
+                }
+            } elseif ($ext === 'png') {
+                $img = imagecreatefrompng($fileTmp);
+                if ($img) {
+                    imagepng($img, $dest, 7);
+                    imagedestroy($img);
+                    $imagePath = '/assets/images/' . $finalName;
+                }
+            } elseif ($ext === 'webp') {
+                if (function_exists('imagecreatefromwebp')) {
+                    $img = imagecreatefromwebp($fileTmp);
+                    if ($img) {
+                        imagewebp($img, $dest, 80);
+                        imagedestroy($img);
+                        $imagePath = '/assets/images/' . $finalName;
+                    }
+                }
+            } else {
+                if (move_uploaded_file($fileTmp, $dest)) {
+                    $imagePath = '/assets/images/' . $finalName;
+                }
+            }
+        }
+    }
 
     if ($id > 0 && $title && $content && $categoryId > 0) {
         updateArticle($id, $title, $slug, $content, $imagePath, $status, $categoryId, $metaDescription, $altText);
@@ -121,9 +223,6 @@ if ($uri === '/admin/categories/edit-form' && $_SERVER['REQUEST_METHOD'] === 'PO
         header('Location: /admin/categories/edit?id=' . urlencode($id) . '&error=1');
         exit;
     }
-
-    // si tu veux régénérer le slug automatiquement :
-    // $slug = generateSlug($title);
 
     if (updateCategory($id, $title, $slug)) {
         header('Location: /admin/categories?updated=1');
