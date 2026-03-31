@@ -22,6 +22,7 @@ RewriteRule ^admin/users/create-form/?$ controllers/AdminController.php [L,QSA]
 RewriteRule ^admin/users/edit/?$ pages/back-office/user-edit.php [L,QSA]
 RewriteRule ^admin/users/edit-form/?$ controllers/AdminController.php [L,QSA]
 RewriteRule ^admin/users/delete/?$ controllers/AdminController.php [L,QSA]
+RewriteRule ^admin/dashboard/?$ pages/back-office/dashboard.php [L,QSA]
 RewriteRule ^$ pages/frontOffices/index.php [L,QSA]
 RewriteRule ^article/([-a-z0-9]+)$ pages/frontOffices/article-detail.php?slug=$1 [L,QSA]
 

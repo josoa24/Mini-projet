@@ -106,10 +106,6 @@ $users = getUsers();
                 <td><?= htmlspecialchars(date('d/m/Y', strtotime($user['created_at']))) ?></td>
                 <td style="text-align:right;">
                   <a href="/admin/users/edit?id=<?= urlencode($user['id']) ?>" class="btn btn-secondary btn-sm">Éditer</a>
-                  <form action="/admin/users/delete" method="POST" style="display:inline;" onsubmit="return confirm('Supprimer cet utilisateur ?');">
-                    <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
-                    <button type="submit" class="btn btn-danger btn-sm">Suppr.</button>
-                  </form>
                 </td>
               </tr>
             <?php endforeach; ?>
