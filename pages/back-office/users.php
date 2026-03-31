@@ -10,7 +10,7 @@ $users = getUsers();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
   <title>Utilisateurs — Backoffice</title>
-  <link rel="stylesheet" href="/assets/css/articles.css">
+  <link rel="stylesheet" href="/assets/css/articles.min.css">
 </head>
 <body>
 <div class="layout">

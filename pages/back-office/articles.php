@@ -25,7 +25,7 @@ $articles = getArticles($perPage, $offset, $status, $category, $search);
   <title>Articles — Backoffice Actu Info</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/articles.css">
+  <link rel="stylesheet" href="/assets/css/articles.min.css">
 </head>
 <body>
 <div class="layout">
@@ -235,13 +235,7 @@ $articles = getArticles($perPage, $offset, $status, $category, $search);
   </div>
 </div>
 
-<script>
-  function openModal() {
-    document.getElementById('modal-overlay').classList.add('open');
-  }
-  function closeModal() {
-    document.getElementById('modal-overlay').classList.remove('open');
-  }
-</script>
+<script src="/assets/js/article.min.js"></script>
+
 </body>
 </html>

@@ -34,7 +34,9 @@ $pageArticles = array_slice($filteredArticles, $startIndex, $articlesPerPage);
     <meta name="keywords" content="guerre en Iran, actualités Iran, conflit Iran, géopolitique, sanctions Iran">
     <meta name="author" content="Mini Projet - FrontOffice">
     <link rel="canonical" href="<?= htmlspecialchars($canonical) ?>">
-    <link rel="stylesheet" href="/pages/frontOffices/styles.css">
+    <!-- <link rel="stylesheet" href="/pages/frontOffices/styles.css"> -->
+    <link rel="stylesheet" href="/assets/css/styles.min.css">
+
 </head>
 <body>
     <header>

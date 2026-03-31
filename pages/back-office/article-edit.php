@@ -23,43 +23,9 @@ $extraImages = getArticleImages($id);
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/articles.css">
-  <style>
-    .char-count{font-size:.7rem;color:var(--text-muted);text-align:right;margin-top:.3rem}
-    .slug-preview{font-size:.72rem;color:var(--text-muted);margin-top:.35rem;font-family:'Courier New',monospace}
-    .slug-preview span{color:var(--gold)}
-    .status-toggle{display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-    .status-toggle label{flex:1;text-align:center;padding:.65rem 0;cursor:pointer;font-size:.78rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;transition:all .15s;color:var(--text-muted);background:var(--bg);margin:0}
-    .status-toggle input[type="radio"]{display:none}
-    .status-toggle input[value="draft"]:checked+label{background:var(--yellow-dim);color:var(--yellow)}
-    .status-toggle input[value="published"]:checked+label{background:var(--green-dim);color:var(--green)}
-    .image-preview{width:100%;height:160px;object-fit:cover;border-radius:var(--radius);border:1px solid var(--border);display:none;margin-bottom:.75rem}
-    .image-preview.visible{display:block}
-    .meta-info{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;font-size:.78rem}
-    .meta-row{display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--border);color:var(--text-muted)}
-    .meta-row:last-child{border-bottom:none}
-    .meta-row span:last-child{color:var(--text-soft)}
-    .toolbar{display:flex;gap:4px;padding:.6rem;background:var(--bg);border:1px solid var(--border);border-bottom:none;border-radius:var(--radius) var(--radius) 0 0;flex-wrap:wrap}
-    .toolbar-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid transparent;border-radius:3px;color:var(--text-soft);cursor:pointer;font-size:.78rem;font-weight:600;transition:all .15s}
-    .toolbar-btn:hover{background:var(--surface-2);border-color:var(--border);color:var(--text)}
-    .toolbar-sep{width:1px;background:var(--border);margin:4px 2px}
-    .field textarea.with-toolbar{border-radius:0 0 var(--radius) var(--radius);border-top:none}
-    .form-grid{display:grid;grid-template-columns:2fr 1.1fr;gap:1.5rem}
-    .form-section{margin-bottom:1.5rem}
-    .field{margin-bottom:1rem}
-    .field label{display:block;font-size:.8rem;margin-bottom:.35rem;color:var(--text-soft)}
-    .field input[type="text"],.field input[type="file"],.field select,.field textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:.55rem .75rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.84rem;outline:none}
-    .field textarea{min-height:180px;resize:vertical}
-    .upload-zone{border:1px dashed var(--border);border-radius:var(--radius);padding:1rem;text-align:center;color:var(--text-muted);cursor:pointer}
-    .field-hint{font-size:.72rem;color:var(--text-muted);margin-top:.25rem}
+    <link rel="stylesheet" href="/assets/css/article-edit.min.css">
 
-    /* Styles pour la galerie d'images secondaires */
-    .images-grid {display:grid;grid-template-columns:repeat(auto-fill, minmax(80px, 1fr));gap:0.5rem;margin-top:0.75rem;}
-    .image-item {position:relative;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;height:80px;}
-    .image-item img {width:100%;height:100%;object-fit:cover;}
-    .image-item.new-upload {border-color:var(--gold);}
-    
-    @media(max-width:980px){.form-grid{grid-template-columns:1fr}}
-  </style>
+
 </head>
 <body>
 
@@ -293,87 +259,7 @@ $extraImages = getArticleImages($id);
   </main>
 </div>
 
-<script>
-  function updateSlug(title) {
-    const slug = title.toLowerCase()
-      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-      .replace(/[^a-z0-9\s-]/g,'')
-      .replace(/\s+/g,'-')
-      .replace(/-+/g,'-')
-      .trim();
-    document.getElementById('slug-preview').textContent = slug || 'slug-de-larticle';
-  }
-
-  function updateCharCount(id,max) {
-    const el = document.getElementById(id);
-    document.getElementById(id+'-count').textContent = el.value.length;
-  }
-
-  // Aperçu de l'image à la une
-  function previewImage(input) {
-    if (input.files && input.files[0]) {
-      const reader = new FileReader();
-      reader.onload = e => {
-        const img = document.getElementById('image-preview');
-        img.src = e.target.result;
-        img.classList.add('visible');
-      };
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-
-  // Aperçu des nouvelles images secondaires chargées
-  function previewExtraImages(input) {
-    const container = document.getElementById('extra-images-preview');
-    
-    // Supprimer les "nouveaux" aperçus précédents s'il y en avait
-    const newPreviews = container.querySelectorAll('.new-upload');
-    newPreviews.forEach(el => el.remove());
-
-    if (input.files) {
-      Array.from(input.files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = e => {
-          const div = document.createElement('div');
-          div.className = 'image-item new-upload';
-          div.innerHTML = `<img src="${e.target.result}" alt="Nouvel upload">`;
-          container.appendChild(div);
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-  }
-
-  function wrapSelection(tag) {
-    const textarea = document.getElementById('content');
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const text = textarea.value;
-    const before = text.substring(0, start);
-    const selected = text.substring(start, end);
-    const after = text.substring(end);
-
-    let open = '', close = '';
-    if (tag === 'b') { open = '<strong>'; close = '</strong>'; }
-    if (tag === 'i') { open = '<em>'; close = '</em>'; }
-    if (tag === 'u') { open = '<u>'; close = '</u>'; }
-    if (tag === 'h1') { open = '<h1>'; close = '</h1>'; }
-    if (tag === 'h2') { open = '<h2>'; close = '</h2>'; }
-    if (tag === 'h3') { open = '<h3>'; close = '</h3>'; }
-
-    const newText = before + open + selected + close + after;
-    textarea.value = newText;
-
-    const cursorPos = start + open.length + selected.length + close.length;
-    textarea.focus();
-    textarea.setSelectionRange(cursorPos, cursorPos);
-  }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    updateCharCount('title', 255);
-    updateCharCount('meta_description', 160);
-  });
-</script>
+<script src="/assets/js/article-edit.min.js"></script>
 
 </body>
 </html>

@@ -12,7 +12,7 @@ $categories = getCategories();
   <title>Catégories — Backoffice Actu Info</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/articles.css">
+  <link rel="stylesheet" href="/assets/css/articles.min.css">
 </head>
 <body>
 <div class="layout">

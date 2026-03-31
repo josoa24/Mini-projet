@@ -34,46 +34,9 @@ $dbCategories = getCategories();
     <meta name="keywords" content="Iran, guerre, actualité, <?= htmlspecialchars($article['slug']) ?>">
     <link rel="canonical" href="<?= htmlspecialchars($canonical) ?>">
     <link rel="stylesheet" href="/pages/frontOffices/styles.css">
-    
-    <style>
-        .article-gallery {
-            margin: 2.5rem 0;
-            padding-top: 1.5rem;
-            border-top: 1px solid #eee;
-        }
-        .gallery-title {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            color: #111;
-        }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-        .gallery-item {
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            height: 150px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: transform 0.2s ease;
-        }
-        .gallery-item:hover {
-            transform: scale(1.02);
-            cursor: pointer;
-        }
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        @media (max-width: 600px) {
-            .gallery-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/assets/css/article-detail.min.css">
+
+
 </head>
 <body>
     <header>

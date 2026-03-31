@@ -6,7 +6,7 @@
   <meta name="description" content="Connexion au backoffice — Système de gestion des contenus">
   <meta name="robots" content="noindex, nofollow">
   <title>Connexion — Backoffice Actu Info</title>
-  <link rel="stylesheet" href="/assets/css/login.css">
+  <link rel="stylesheet" href="/assets/css/login.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 </head>

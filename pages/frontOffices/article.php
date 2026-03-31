@@ -26,7 +26,7 @@ $canonical = 'https://example.com/article/' . $slug . '.html';
     <meta name="description" content="<?= htmlspecialchars($article['meta_description'] ?? $article['content']) ?>">
     <meta name="keywords" content="Iran, guerre, actualité, sanctions, diplomatie, conflit">
     <link rel="canonical" href="<?= htmlspecialchars($canonical) ?>">
-    <link rel="stylesheet" href="/pages/frontOffices/styles.css">
+    <link rel="stylesheet" href="/pages/frontOffices/styles.min.css">
 </head>
 <body>
     <header>
