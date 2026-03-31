@@ -275,5 +275,30 @@ if ($uri === '/admin/categories/edit-form' && $_SERVER['REQUEST_METHOD'] === 'PO
     exit;
 }
 
+if ($uri === '/admin/users/edit-form' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    session_start();
+    if (empty($_SESSION['user'])) {
+        header('Location: /admin/login?error=2');
+        exit;
+    }
+    $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+    $name = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $role = $_POST['role'] ?? '';
+    $password = $_POST['password'] ?? null;
+    if ($id <= 0 || $name === '' || $email === '' || $role === '') {
+        header('Location: /admin/users/edit?id=' . urlencode($id) . '&error=1');
+        exit;
+    }
+    // Si le champ mot de passe est vide, ne pas le modifier
+    $passwordToUpdate = ($password !== null && $password !== '') ? $password : null;
+    if (updateUser($id, $name, $email, $role, $passwordToUpdate)) {
+        header('Location: /admin/users?updated=1');
+        exit;
+    }
+    header('Location: /admin/users/edit?id=' . urlencode($id) . '&error=1');
+    exit;
+}
+
 header('Location: /admin/login');
 exit;

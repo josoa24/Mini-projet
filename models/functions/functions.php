@@ -240,3 +240,46 @@ function getArticleImages(int $articleId): array
     
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+function getUsers(): array
+{
+    $pdo = connect();
+    $sql = 'SELECT * FROM users ORDER BY created_at DESC';
+    $stmt = $pdo->query($sql);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getUserById(int $id): ?array
+{
+    $pdo = connect();
+    $sql = 'SELECT * FROM users WHERE id = :id LIMIT 1';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id' => $id]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $user !== false ? $user : null;
+}
+
+function updateUser(int $id, string $name, string $email, string $role, ?string $password = null): bool
+{
+    $pdo = connect();
+    if ($password !== null && $password !== '') {
+        $sql = 'UPDATE users SET name = :name, email = :email, role = :role, password = :password, updated_at = CURRENT_TIMESTAMP WHERE id = :id';
+        $params = [
+            'id' => $id,
+            'name' => $name,
+            'email' => $email,
+            'role' => $role,
+            'password' => $password
+        ];
+    } else {
+        $sql = 'UPDATE users SET name = :name, email = :email, role = :role, updated_at = CURRENT_TIMESTAMP WHERE id = :id';
+        $params = [
+            'id' => $id,
+            'name' => $name,
+            'email' => $email,
+            'role' => $role
+        ];
+    }
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute($params);
+}
