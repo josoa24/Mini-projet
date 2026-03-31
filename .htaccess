@@ -10,6 +10,13 @@ RewriteRule ^admin/articles/edit/?$ pages/back-office/article-edit.php [L,QSA]
 RewriteRule ^admin/articles/edit-form/?$ controllers/AdminController.php [L,QSA]
 RewriteRule ^admin/articles/delete/?$ controllers/AdminController.php [L,QSA]
 
+RewriteRule ^admin/categories/?$ pages/back-office/categories.php [L,QSA]
+RewriteRule ^admin/categories/create/?$ pages/back-office/category-create.php [L,QSA]
+RewriteRule ^admin/categories/create-form/?$ controllers/AdminController.php [L,QSA]
+RewriteRule ^admin/categories/edit/?$ pages/back-office/category-edit.php [L,QSA]
+RewriteRule ^admin/categories/edit-form/?$ controllers/AdminController.php [L,QSA]
+RewriteRule ^admin/categories/delete/?$ controllers/AdminController.php [L,QSA]
+
 RewriteRule ^pages/article-([_a-z0-9]*)\.html$ pages/modules.php?id=$1 [L,QSA]
 
 RewriteRule ^.*/?.*-([_a-z0-9]+)-([_a-z0-9]+)\.html$ pages/modules.php?id=$1&idcat=$2 [L,QSA]

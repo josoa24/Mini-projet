@@ -126,6 +126,15 @@ function getCategories(): array
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getCategoryById(int $id): ?array
+{
+    $pdo = connect();
+    $stmt = $pdo->prepare('SELECT * FROM categories WHERE id = :id LIMIT 1');
+    $stmt->execute(['id' => $id]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row !== false ? $row : null;
+}
+
 function createArticle(string $title, string $slug, string $content, ?string $imagePath, string $status, int $userId, int $categoryId, ?string $metaDescription = null, ?string $altText = null): int
 {
     $pdo = connect();
@@ -192,4 +201,16 @@ function deleteArticle(int $id): bool
     $stmt = $pdo->prepare($sql);
 
     return $stmt->execute(['id' => $id]);
+}
+
+function updateCategory(int $id, string $title, string $slug): bool
+{
+    $pdo = connect();
+    $sql = 'UPDATE categories SET title = :title, slug = :slug WHERE id = :id';
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute([
+        'id' => $id,
+        'title' => $title,
+        'slug' => $slug,
+    ]);
 }

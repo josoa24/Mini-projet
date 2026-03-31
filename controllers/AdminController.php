@@ -106,5 +106,33 @@ if ($uri === '/admin/articles/delete' && $_SERVER['REQUEST_METHOD'] === 'POST') 
     }
 }
 
+if ($uri === '/admin/categories/edit-form' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    session_start();
+    if (empty($_SESSION['user'])) {
+        header('Location: /admin/login');
+        exit;
+    }
+
+    $id    = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+    $title = trim($_POST['title'] ?? '');
+    $slug  = trim($_POST['slug'] ?? '');
+
+    if ($id <= 0 || $title === '' || $slug === '') {
+        header('Location: /admin/categories/edit?id=' . urlencode($id) . '&error=1');
+        exit;
+    }
+
+    // si tu veux régénérer le slug automatiquement :
+    // $slug = generateSlug($title);
+
+    if (updateCategory($id, $title, $slug)) {
+        header('Location: /admin/categories?updated=1');
+        exit;
+    }
+
+    header('Location: /admin/categories/edit?id=' . urlencode($id) . '&error=1');
+    exit;
+}
+
 header('Location: /admin/login');
 exit;
