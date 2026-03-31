@@ -9,6 +9,9 @@ if (!$article) {
     header('Location: /admin/articles');
     exit;
 }
+
+// Récupération des images secondaires
+$extraImages = getArticleImages($id);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -48,6 +51,13 @@ if (!$article) {
     .field textarea{min-height:180px;resize:vertical}
     .upload-zone{border:1px dashed var(--border);border-radius:var(--radius);padding:1rem;text-align:center;color:var(--text-muted);cursor:pointer}
     .field-hint{font-size:.72rem;color:var(--text-muted);margin-top:.25rem}
+
+    /* Styles pour la galerie d'images secondaires */
+    .images-grid {display:grid;grid-template-columns:repeat(auto-fill, minmax(80px, 1fr));gap:0.5rem;margin-top:0.75rem;}
+    .image-item {position:relative;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;height:80px;}
+    .image-item img {width:100%;height:100%;object-fit:cover;}
+    .image-item.new-upload {border-color:var(--gold);}
+    
     @media(max-width:980px){.form-grid{grid-template-columns:1fr}}
   </style>
 </head>
@@ -138,6 +148,9 @@ if (!$article) {
 
       <form id="article-form" action="/admin/articles/edit-form" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?= htmlspecialchars($article['id']) ?>">
+        
+        <input type="hidden" name="current_image" value="<?= htmlspecialchars($article['image_path'] ?? '') ?>">
+
         <div class="form-grid">
           <div>
             <div class="form-section">
@@ -229,7 +242,7 @@ if (!$article) {
                   <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
                   <polyline points="21 15 16 10 5 21"/>
                 </svg>
-                <p>Cliquez pour choisir une image</p>
+                <p>Cliquez pour changer d'image</p>
                 <p style="font-size:0.68rem;">JPG, PNG, WebP — max 5 Mo</p>
               </div>
               <input type="file" id="image" name="image" accept="image/*" style="display:none;" onchange="previewImage(this)">
@@ -239,6 +252,29 @@ if (!$article) {
                 <input type="text" id="alt_text" name="alt_text" placeholder="Description de l'image pour le SEO" value="<?= htmlspecialchars($article['alt_text'] ?? '') ?>">
                 <div class="field-hint">Obligatoire pour l'accessibilité et le référencement.</div>
               </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Galerie photos de l'article</h3>
+              
+              <div class="upload-zone" onclick="document.getElementById('extra_images').click()">
+                <svg width="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-muted); margin-bottom:0.3rem;">
+                  <path d="M12 5v14M5 12h14"/>
+                </svg>
+                <p style="font-size:0.75rem;">Ajouter des images supplémentaires</p>
+              </div>
+              
+              <input type="file" id="extra_images" name="extra_images[]" accept="image/*" multiple style="display:none;" onchange="previewExtraImages(this)">
+              
+              <div class="images-grid" id="extra-images-preview">
+                <?php foreach ($extraImages as $img): ?>
+                  <div class="image-item">
+                    <img src="<?= htmlspecialchars($img['image_path']) ?>" alt="Image secondaire">
+                  </div>
+                <?php endforeach; ?>
+              </div>
+              
+              <div class="field-hint" style="margin-top:0.5rem;">Ces images s'afficheront en bas de l'article sous forme de slider ou de galerie.</div>
             </div>
 
             <div class="form-section">
@@ -273,6 +309,7 @@ if (!$article) {
     document.getElementById(id+'-count').textContent = el.value.length;
   }
 
+  // Aperçu de l'image à la une
   function previewImage(input) {
     if (input.files && input.files[0]) {
       const reader = new FileReader();
@@ -282,6 +319,28 @@ if (!$article) {
         img.classList.add('visible');
       };
       reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  // Aperçu des nouvelles images secondaires chargées
+  function previewExtraImages(input) {
+    const container = document.getElementById('extra-images-preview');
+    
+    // Supprimer les "nouveaux" aperçus précédents s'il y en avait
+    const newPreviews = container.querySelectorAll('.new-upload');
+    newPreviews.forEach(el => el.remove());
+
+    if (input.files) {
+      Array.from(input.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const div = document.createElement('div');
+          div.className = 'image-item new-upload';
+          div.innerHTML = `<img src="${e.target.result}" alt="Nouvel upload">`;
+          container.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+      });
     }
   }
 
@@ -310,7 +369,6 @@ if (!$article) {
     textarea.setSelectionRange(cursorPos, cursorPos);
   }
 
-  // initialiser le compteur de caractères au chargement
   document.addEventListener('DOMContentLoaded', function() {
     updateCharCount('title', 255);
     updateCharCount('meta_description', 160);

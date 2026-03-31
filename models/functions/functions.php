@@ -214,3 +214,29 @@ function updateCategory(int $id, string $title, string $slug): bool
         'slug' => $slug,
     ]);
 }
+
+function createImageArticle(int $articleId, string $imagePath, ?string $altText = null): bool
+{
+    $pdo = connect();
+
+    $sql = 'INSERT INTO imagearticle (article_id, image_path, alt_text)
+            VALUES (:article_id, :image_path, :alt_text)';
+
+    $stmt = $pdo->prepare($sql);
+    
+    return $stmt->execute([
+        'article_id' => $articleId,
+        'image_path' => $imagePath,
+        'alt_text' => $altText,
+    ]);
+}
+
+function getArticleImages(int $articleId): array
+{
+    $pdo = connect();
+    $sql = 'SELECT * FROM imagearticle WHERE article_id = :article_id ORDER BY id ASC';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['article_id' => $articleId]);
+    
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}

@@ -48,6 +48,38 @@ $altText = $_POST['alt_text'] ?? '';
     .field textarea{min-height:180px;resize:vertical}
     .upload-zone{border:1px dashed var(--border);border-radius:var(--radius);padding:1rem;text-align:center;color:var(--text-muted);cursor:pointer}
     .field-hint{font-size:.72rem;color:var(--text-muted);margin-top:.25rem}
+    
+    /* Styles pour les images multiples cumulables */
+    .extra-img-container {
+        position: relative;
+        width: 80px;
+        height: 80px;
+    }
+    .extra-img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+    }
+    .extra-img-container .delete-btn {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #ff4d4d;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 11px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+
     @media(max-width:980px){.form-grid{grid-template-columns:1fr}}
   </style>
 </head>
@@ -163,19 +195,6 @@ $altText = $_POST['alt_text'] ?? '';
                   <button type="button" class="toolbar-btn" title="H1" style="font-size:0.65rem;" onclick="wrapSelection('h1')">H1</button>
                   <button type="button" class="toolbar-btn" title="H2" style="font-size:0.65rem;" onclick="wrapSelection('h2')">H2</button>
                   <button type="button" class="toolbar-btn" title="H3" style="font-size:0.65rem;" onclick="wrapSelection('h3')">H3</button>
-                  <div class="toolbar-sep"></div>
-                  <button type="button" class="toolbar-btn" title="Liste">
-                    <svg width="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
-                      <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
-                    </svg>
-                  </button>
-                  <button type="button" class="toolbar-btn" title="Lien">
-                    <svg width="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-                    </svg>
-                  </button>
                 </div>
                 <textarea class="with-toolbar" id="content" name="content" required placeholder="Rédigez votre article ici..."><?= htmlspecialchars($content) ?></textarea>
               </div>
@@ -204,21 +223,6 @@ $altText = $_POST['alt_text'] ?? '';
                   <?php endforeach; ?>
                 </select>
               </div>
-
-              <div class="meta-info">
-                <div class="meta-row">
-                  <span>Auteur</span>
-                  <span>Administrator</span>
-                </div>
-                <div class="meta-row">
-                  <span>Créé le</span>
-                  <span>—</span>
-                </div>
-                <div class="meta-row">
-                  <span>Modifié le</span>
-                  <span>—</span>
-                </div>
-              </div>
             </div>
 
             <div class="form-section">
@@ -229,16 +233,29 @@ $altText = $_POST['alt_text'] ?? '';
                   <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
                   <polyline points="21 15 16 10 5 21"/>
                 </svg>
-                <p>Cliquez pour choisir une image</p>
-                <p style="font-size:0.68rem;">JPG, PNG, WebP — max 5 Mo</p>
+                <p>Cliquez pour choisir l'image principale</p>
               </div>
               <input type="file" id="image" name="image" accept="image/*" style="display:none;" onchange="previewImage(this)">
 
               <div class="field" style="margin-top:1rem; margin-bottom:0;">
                 <label for="alt_text">Texte alternatif (alt)</label>
-                <input type="text" id="alt_text" name="alt_text" placeholder="Description de l'image pour le SEO" value="<?= htmlspecialchars($altText) ?>">
-                <div class="field-hint">Obligatoire pour l'accessibilité et le référencement.</div>
+                <input type="text" id="alt_text" name="alt_text" placeholder="Description de l'image principale" value="<?= htmlspecialchars($altText) ?>">
               </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Images supplémentaires</h3>
+              <div class="upload-zone" onclick="document.getElementById('extra_images').click()">
+                <svg width="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-muted); margin-bottom:0.5rem;">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/>
+                </svg>
+                <p>Ajouter des images supplémentaires</p>
+              </div>
+              <input type="file" id="extra_images" accept="image/*" multiple style="display:none;">
+              
+              <div class="field-hint">Vous pouvez en ajouter autant que vous voulez. Cliquez sur la croix pour retirer.</div>
+              
+              <div id="extra-images-preview" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:15px;"></div>
             </div>
 
             <div class="form-section">
@@ -304,11 +321,90 @@ $altText = $_POST['alt_text'] ?? '';
 
     const newText = before + open + selected + close + after;
     textarea.value = newText;
-
-    const cursorPos = start + open.length + selected.length + close.length;
     textarea.focus();
+    const cursorPos = start + open.length + selected.length + close.length;
     textarea.setSelectionRange(cursorPos, cursorPos);
   }
+
+  // LOGIQUE POUR ACCUMULER LES IMAGES MULTIPLES
+  let selectedFiles = []; // Notre tableau virtuel pour stocker toutes les images choisies
+
+  document.getElementById('extra_images').addEventListener('change', function(e) {
+    const files = Array.from(e.target.files);
+    
+    files.forEach(file => {
+        selectedFiles.push(file); // On ajoute l'image au tableau global
+    });
+
+    renderPreviews();
+    this.value = ''; // On vide l'input file pour permettre de re-sélectionner les mêmes fichiers si besoin
+  });
+
+  function renderPreviews() {
+    const previewContainer = document.getElementById('extra-images-preview');
+    previewContainer.innerHTML = ''; // On nettoie l'affichage pour le reconstruire
+
+    selectedFiles.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = ev => {
+            const container = document.createElement('div');
+            container.className = 'extra-img-container';
+
+            const img = document.createElement('img');
+            img.src = ev.target.result;
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.innerHTML = '×';
+            deleteBtn.title = 'Supprimer cette image';
+            
+            // Événement pour retirer l'image du tableau virtuel
+            deleteBtn.onclick = function() {
+                selectedFiles.splice(index, 1);
+                renderPreviews(); // On actualise l'affichage
+            };
+
+            container.appendChild(img);
+            container.appendChild(deleteBtn);
+            previewContainer.appendChild(container);
+        };
+        reader.readAsDataURL(file);
+    });
+  }
+
+  // Intercepter l'envoi du formulaire pour y injecter nos images accumulées
+  document.getElementById('article-form').addEventListener('submit', function(e) {
+    e.preventDefault(); // On bloque l'envoi classique temporairement
+
+    const formData = new FormData(this);
+
+    // On ajoute toutes les images de notre tableau virtuel dans le FormData
+    selectedFiles.forEach((file, index) => {
+        formData.append('extra_images[]', file);
+    });
+
+    // On envoie le formulaire complet via Fetch (AJAX) ou en forçant la soumission
+    fetch(this.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.redirected) {
+            window.location.href = response.url; // Redirection si le PHP redirige (par ex : vers la liste)
+        } else {
+            return response.text();
+        }
+    })
+    .then(data => {
+        if (data) {
+            // Optionnel : Gérer ici les retours d'erreurs bruts ou rafraîchir la page
+            document.open();
+            document.write(data);
+            document.close();
+        }
+    })
+    .catch(error => console.error('Erreur lors de l\'envoi:', error));
+  });
 </script>
 
 </body>

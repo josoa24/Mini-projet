@@ -17,6 +17,9 @@ if (!$article || $article['slug'] !== $articleSlug) {
     exit('Article non trouvé');
 }
 
+// RECUPERATION DES IMAGES SUPPLÉMENTAIRES
+$extraImages = getArticleImages($articleId);
+
 $canonical = 'https://example.com/article/' . $article['id'] . '-' . $article['slug'];
 
 $dbCategories = getCategories(); 
@@ -31,6 +34,46 @@ $dbCategories = getCategories();
     <meta name="keywords" content="Iran, guerre, actualité, <?= htmlspecialchars($article['slug']) ?>">
     <link rel="canonical" href="<?= htmlspecialchars($canonical) ?>">
     <link rel="stylesheet" href="/pages/frontOffices/styles.css">
+    
+    <style>
+        .article-gallery {
+            margin: 2.5rem 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+        .gallery-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #111;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .gallery-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 150px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+        .gallery-item:hover {
+            transform: scale(1.02);
+            cursor: pointer;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        @media (max-width: 600px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -65,12 +108,12 @@ $dbCategories = getCategories();
         <h1><?= htmlspecialchars($article['title']) ?></h1>
 
         <div class="article-meta">
-            <p class="meta">
+            <div class="meta">
                 <strong>Par <?= htmlspecialchars($article['author_name'] ?? 'Anonyme') ?></strong>
                 <?php if (!empty($article['created_at'])): ?> 
                     | Publié le <?= date('d/m/Y', strtotime($article['created_at'])) ?>
                 <?php endif; ?>
-            </p>
+            </div>
             <p class="article-description"><em><?= htmlspecialchars($article['meta_description'] ?? '') ?></em></p>
         </div>
 
@@ -81,6 +124,21 @@ $dbCategories = getCategories();
         <div class="article-content">
             <?= nl2br(htmlspecialchars($article['content'])) ?>
         </div>
+
+        <?php if (!empty($extraImages)): ?>
+            <div class="article-gallery">
+                <h3 class="gallery-title">En images</h3>
+                <div class="gallery-grid">
+                    <?php foreach ($extraImages as $img): ?>
+                        <div class="gallery-item">
+                            <img src="<?= htmlspecialchars($img['image_path']) ?>" 
+                                 alt="<?= htmlspecialchars($img['alt_text'] ?? $article['title']) ?>" 
+                                 loading="lazy">
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
 
         <div class="article-actions">
             <a class="cta" href="/">← Retour à l'accueil</a>

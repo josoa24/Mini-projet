@@ -26,6 +26,7 @@ CREATE TABLE articles (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE INDEX idx_articles_status_published ON articles (status, published_at)
 WHERE
     status = 'published';
