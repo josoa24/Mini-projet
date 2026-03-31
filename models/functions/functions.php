@@ -13,6 +13,25 @@ function findUserByEmail(string $email): ?array
 
     return $user !== false ? $user : null;
 }
+
+function getArticleById(int $id): ?array
+{
+    $pdo = connect();
+
+    $sql = 'SELECT a.*, c.title AS category_title, c.slug AS category_slug, u.name AS author_name
+            FROM articles a
+            LEFT JOIN categories c ON a.category_id = c.id
+            LEFT JOIN users u ON a.user_id = u.id
+            WHERE a.id = :id
+            LIMIT 1';
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id' => $id]);
+    $article = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $article !== false ? $article : null;
+}
+
 function verifyLogin(string $email, string $password): ?array
 {
     $user = findUserByEmail($email);
@@ -95,4 +114,72 @@ function countArticles(?string $status = null, ?string $categorySlug = null, ?st
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     return (int) ($row['total'] ?? 0);
+}
+
+function getCategories(): array
+{
+    $pdo = connect();
+
+    $sql = 'SELECT * FROM categories ORDER BY title ASC';
+    $stmt = $pdo->query($sql);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function createArticle(string $title, string $slug, string $content, ?string $imagePath, string $status, int $userId, int $categoryId, ?string $metaDescription = null, ?string $altText = null): int
+{
+    $pdo = connect();
+
+    $sql = 'INSERT INTO articles (title, slug, content, image_path, status, user_id, category_id, meta_description, alt_text, published_at)
+            VALUES (:title, :slug, :content, :image_path, :status, :user_id, :category_id, :meta_description, :alt_text, :published_at)
+            RETURNING id';
+
+    $publishedAt = $status === 'published' ? date('Y-m-d H:i:s') : null;
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        'title' => $title,
+        'slug' => $slug,
+        'content' => $content,
+        'image_path' => $imagePath,
+        'status' => $status,
+        'user_id' => $userId,
+        'category_id' => $categoryId,
+        'meta_description' => $metaDescription,
+        'alt_text' => $altText,
+        'published_at' => $publishedAt,
+    ]);
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return (int) ($row['id'] ?? 0);
+}
+
+function updateArticle(int $id, string $title, string $slug, string $content, ?string $imagePath, string $status, int $categoryId, ?string $metaDescription = null, ?string $altText = null): bool
+{
+    $pdo = connect();
+
+    $sql = 'UPDATE articles
+            SET title = :title,
+                slug = :slug,
+                content = :content,
+                image_path = :image_path,
+                status = :status,
+                category_id = :category_id,
+                meta_description = :meta_description,
+                alt_text = :alt_text,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = :id';
+
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute([
+        'id' => $id,
+        'title' => $title,
+        'slug' => $slug,
+        'content' => $content,
+        'image_path' => $imagePath,
+        'status' => $status,
+        'category_id' => $categoryId,
+        'meta_description' => $metaDescription,
+        'alt_text' => $altText,
+    ]);
 }

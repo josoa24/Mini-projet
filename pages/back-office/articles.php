@@ -44,7 +44,7 @@ $articles = getArticles($perPage, $offset, $status, $category, $search);
     </div>
     <nav class="nav">
       <div class="nav-section">Navigation</div>
-      <a href="dashboard.html">
+      <a href="/admin/dashboard">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
           <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
@@ -52,22 +52,22 @@ $articles = getArticles($perPage, $offset, $status, $category, $search);
         Tableau de bord
       </a>
       <div class="nav-section">Contenu</div>
-      <a href="articles.html" class="active">
+      <a href="/admin/articles" class="active">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
           <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
         </svg>
         Articles
-        <span class="nav-badge">24</span>
+        <span class="nav-badge"><?= htmlspecialchars($totalArticles) ?></span>
       </a>
-      <a href="categories.html">
+      <a href="/admin/categories">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M4 6h16M4 12h16M4 18h7"/>
         </svg>
         Catégories
       </a>
       <div class="nav-section">Administration</div>
-      <a href="users.html">
+      <a href="/admin/users">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
           <circle cx="9" cy="7" r="4"/>
@@ -77,7 +77,7 @@ $articles = getArticles($perPage, $offset, $status, $category, $search);
       </a>
     </nav>
     <div class="sidebar-footer">
-      <a href="login.html">
+      <a href="/admin/logout">
         <svg style="width:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
         </svg>
@@ -89,12 +89,12 @@ $articles = getArticles($perPage, $offset, $status, $category, $search);
   <main class="main">
     <header class="topbar">
       <nav class="breadcrumb">
-        <a href="dashboard.html">Tableau de bord</a>
+        <a href="/admin/dashboard">Tableau de bord</a>
         <span class="sep">/</span>
         <span class="current">Articles</span>
       </nav>
       <div class="topbar-actions">
-        <a href="article-form.html" class="btn btn-primary">
+        <a href="/admin/articles/create" class="btn btn-primary">
           <svg style="width:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" y1="5" x2="12" y2="19"/>
             <line x1="5" y1="12" x2="19" y2="12"/>
@@ -112,7 +112,17 @@ $articles = getArticles($perPage, $offset, $status, $category, $search);
         </div>
       </div>
 
-      <div class="alert alert-success">✓ &nbsp;Article créé avec succès.</div>
+      <?php
+      $created = $_GET['created'] ?? '';
+      $updated = $_GET['updated'] ?? '';
+      if ($created === '1') {
+      ?>
+        <div class="alert alert-success">✓ &nbsp;Article créé avec succès.</div>
+      <?php
+      } elseif ($updated === '1') {
+      ?>
+        <div class="alert alert-success">✓ &nbsp;Article mis à jour avec succès.</div>
+      <?php } ?>
 
       <div class="card">
         <div class="filters-bar">
@@ -163,7 +173,7 @@ $articles = getArticles($perPage, $offset, $status, $category, $search);
                 <td><?= htmlspecialchars(date('d/m/Y', strtotime($article['created_at']))) ?></td>
                 <td>
                   <div class="td-actions">
-                    <a href="article-form.html" class="btn btn-secondary btn-sm">Éditer</a>
+                    <a href="/admin/articles/edit?id=<?= urlencode($article['id']) ?>" class="btn btn-secondary btn-sm">Éditer</a>
                     <button class="btn btn-danger btn-sm" onclick="openModal()">Suppr.</button>
                   </div>
                 </td>
