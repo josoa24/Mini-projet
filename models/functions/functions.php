@@ -283,3 +283,18 @@ function updateUser(int $id, string $name, string $email, string $role, ?string 
     $stmt = $pdo->prepare($sql);
     return $stmt->execute($params);
 }
+
+function createUser(string $name, string $email, string $role, string $password): int
+{
+    $pdo = connect();
+    $sql = 'INSERT INTO users (name, email, role, password) VALUES (:name, :email, :role, :password) RETURNING id';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        'name' => $name,
+        'email' => $email,
+        'role' => $role,
+        'password' => $password
+    ]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return (int)($row['id'] ?? 0);
+}

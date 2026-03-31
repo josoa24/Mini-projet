@@ -300,5 +300,38 @@ if ($uri === '/admin/users/edit-form' && $_SERVER['REQUEST_METHOD'] === 'POST') 
     exit;
 }
 
+if ($uri === '/admin/users/create-form' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    session_start();
+    if (empty($_SESSION['user'])) {
+        header('Location: /admin/login?error=2');
+        exit;
+    }
+    $name = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $role = $_POST['role'] ?? '';
+    $password = $_POST['password'] ?? '';
+    if ($name === '' || $email === '' || $role === '' || $password === '') {
+        header('Location: /admin/users/create?error=1');
+        exit;
+    }
+    try {
+        $userId = createUser($name, $email, $role, $password);
+        if ($userId > 0) {
+            header('Location: /admin/users?created=1');
+            exit;
+        } else {
+            header('Location: /admin/users/create?error=2');
+            exit;
+        }
+    } catch (PDOException $e) {
+        if ($e->getCode() === '23505') { // email unique violation
+            header('Location: /admin/users/create?error=email');
+            exit;
+        }
+        header('Location: /admin/users/create?error=3');
+        exit;
+    }
+}
+
 header('Location: /admin/login');
 exit;
