@@ -8,6 +8,7 @@ RewriteRule ^admin/articles/create/?$  pages/back-office/article-create.php [L,Q
 RewriteRule ^admin/articles/create-form/?$ controllers/AdminController.php [L,QSA]
 RewriteRule ^admin/articles/edit/?$ pages/back-office/article-edit.php [L,QSA]
 RewriteRule ^admin/articles/edit-form/?$ controllers/AdminController.php [L,QSA]
+RewriteRule ^admin/articles/delete/?$ controllers/AdminController.php [L,QSA]
 
 RewriteRule ^pages/article-([_a-z0-9]*)\.html$ pages/modules.php?id=$1 [L,QSA]
 

@@ -115,6 +115,7 @@ $articles = getArticles($perPage, $offset, $status, $category, $search);
       <?php
       $created = $_GET['created'] ?? '';
       $updated = $_GET['updated'] ?? '';
+      $deleted = $_GET['deleted'] ?? '';
       if ($created === '1') {
       ?>
         <div class="alert alert-success">✓ &nbsp;Article créé avec succès.</div>
@@ -122,7 +123,9 @@ $articles = getArticles($perPage, $offset, $status, $category, $search);
       } elseif ($updated === '1') {
       ?>
         <div class="alert alert-success">✓ &nbsp;Article mis à jour avec succès.</div>
-      <?php } ?>
+      <?php } elseif ($deleted === '1') {
+    echo '<div class="alert alert-success">✓ &nbsp;Article supprimé avec succès.</div>';
+  } ?>
 
       <div class="card">
         <div class="filters-bar">
@@ -174,7 +177,10 @@ $articles = getArticles($perPage, $offset, $status, $category, $search);
                 <td>
                   <div class="td-actions">
                     <a href="/admin/articles/edit?id=<?= urlencode($article['id']) ?>" class="btn btn-secondary btn-sm">Éditer</a>
-                    <button class="btn btn-danger btn-sm" onclick="openModal()">Suppr.</button>
+                    <form action="/admin/articles/delete" method="POST" style="display:inline;" onsubmit="return confirm('Supprimer cet article ?');">
+                      <input type="hidden" name="id" value="<?= htmlspecialchars($article['id']) ?>">
+                      <button type="submit" class="btn btn-danger btn-sm">Suppr.</button>
+                    </form>
                   </div>
                 </td>
               </tr>

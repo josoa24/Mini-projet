@@ -183,3 +183,13 @@ function updateArticle(int $id, string $title, string $slug, string $content, ?s
         'alt_text' => $altText,
     ]);
 }
+
+function deleteArticle(int $id): bool
+{
+    $pdo = connect();
+
+    $sql = 'DELETE FROM articles WHERE id = :id';
+    $stmt = $pdo->prepare($sql);
+
+    return $stmt->execute(['id' => $id]);
+}

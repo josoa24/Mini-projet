@@ -87,5 +87,24 @@ if ($uri === '/admin/articles/edit-form' && $_SERVER['REQUEST_METHOD'] === 'POST
     }
 }
 
+if ($uri === '/admin/articles/delete' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    session_start();
+    if (empty($_SESSION['user'])) {
+        header('Location: /admin/login?error=2');
+        exit;
+    }
+
+    $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+
+    if ($id > 0) {
+        deleteArticle($id);
+        header('Location: /admin/articles?deleted=1');
+        exit;
+    } else {
+        header('Location: /admin/articles?error=1');
+        exit;
+    }
+}
+
 header('Location: /admin/login');
 exit;
